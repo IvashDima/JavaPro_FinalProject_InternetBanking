@@ -81,7 +81,7 @@ public class TransactionController {
     {
         Account account = (accountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
 
-        Transaction transaction = new Transaction(account, account, amount, TransactionType.deposit);
+        Transaction transaction = new Transaction(account, account, amount, TransactionType.DEPOSIT);
         transactionService.deposit(transaction);
 
         return "redirect:/transaction/account/" + accountId;
@@ -103,7 +103,7 @@ public class TransactionController {
         Account fromAccount = (fromAccountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(fromAccountId) : null;
         Account toAccount = (toAccountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(toAccountId) : null;
 
-        Transaction transaction = new Transaction(fromAccount, toAccount, amount, TransactionType.transfer);
+        Transaction transaction = new Transaction(fromAccount, toAccount, amount, TransactionType.TRANSFER);
         transactionService.transfer(transaction);
 
         return "redirect:/transaction/account/" + fromAccountId;
