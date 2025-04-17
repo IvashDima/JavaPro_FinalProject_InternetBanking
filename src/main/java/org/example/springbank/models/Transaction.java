@@ -1,8 +1,10 @@
 package org.example.springbank.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.example.springbank.enums.TransactionType;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "Transactions")
@@ -11,6 +13,9 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm", timezone = "UTC")
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
@@ -29,6 +34,7 @@ public class Transaction {
     public Transaction(){}
 
     public Transaction(Account senderAccount, Account receiverAccount, double amount, TransactionType type){
+        this.date = new Date();
         this.sender = senderAccount;
         this.receiver = receiverAccount;
         this.amount = amount;
