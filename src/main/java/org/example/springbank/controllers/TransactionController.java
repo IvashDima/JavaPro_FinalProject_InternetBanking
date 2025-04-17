@@ -77,7 +77,7 @@ public class TransactionController {
 
     @PostMapping(value="/transaction/deposit")
     public String transactionDeposit(@RequestParam(value = "fromaccount") long accountId,
-                             @RequestParam double amount)
+                                     @RequestParam double amount)
     {
         Account account = (accountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
 
