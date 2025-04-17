@@ -1,7 +1,7 @@
 package org.example.springbank.mail;
 
-import org.example.springbank.dto.ToNotifyDTO;
+import org.example.springbank.dto.TransactionToNotifyDTO;
 
 public interface EmailService {
-    void sendMessage(ToNotifyDTO task);
+    void sendMessage(TransactionToNotifyDTO transaction);
 }

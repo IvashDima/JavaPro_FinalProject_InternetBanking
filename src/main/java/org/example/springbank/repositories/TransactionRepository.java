@@ -1,5 +1,6 @@
 package org.example.springbank.repositories;
 
+import org.example.springbank.dto.TransactionToNotifyDTO;
 import org.example.springbank.models.Account;
 import org.example.springbank.models.Transaction;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -28,4 +30,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     long countBySenderAccount(@Param("senderAccount") Account senderAccount);
     @Query("SELECT COUNT(c) FROM Transaction c WHERE c.receiver = :receiverAccount")
     long countByReceiverAccount(@Param("receiverAccount") Account receiverAccount);
+
+    @Query("SELECT NEW org.example.springbank.dto.TransactionToNotifyDTO(u.email, t.date, t.sender.client.name)" + //t.receiver, t.amount, t.type
+            "FROM CustomUser u, Transaction t WHERE t.date >= :from AND t.date < :to")
+    List<TransactionToNotifyDTO> findTransactionToNotify(@Param("from") Date from,
+                                              @Param("to") Date to);
 }

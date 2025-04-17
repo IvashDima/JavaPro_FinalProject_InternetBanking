@@ -1,5 +1,6 @@
 package org.example.springbank.services;
 
+import org.example.springbank.dto.TransactionToNotifyDTO;
 import org.example.springbank.models.Account;
 import org.example.springbank.models.Transaction;
 import org.example.springbank.repositories.AccountRepository;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -96,5 +99,20 @@ public class TransactionService {
 
     public void deleteAllTransactions() {
         transactionRepository.deleteAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionToNotifyDTO> getTransactionToNotify(Date now) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(now);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date from = calendar.getTime();
+
+        calendar.add(Calendar.MINUTE, 1);
+        Date to = calendar.getTime();
+
+        return transactionRepository.findTransactionToNotify(from, to);
     }
 }

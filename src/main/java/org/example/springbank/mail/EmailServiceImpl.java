@@ -1,10 +1,12 @@
 package org.example.springbank.mail;
 
-import org.example.springbank.dto.ToNotifyDTO;
+import org.example.springbank.dto.TransactionToNotifyDTO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmailServiceImpl implements EmailService{
 
     private final JavaMailSender emailSender;
@@ -15,13 +17,13 @@ public class EmailServiceImpl implements EmailService{
         this.applicationContext = applicationContext;
     }
 
-    public void sendMessage(ToNotifyDTO task) {
+    public void sendMessage(TransactionToNotifyDTO transaction) {
         SimpleMailMessage message = applicationContext.getBean(SimpleMailMessage.class);
 
-        String text = String.format(message.getText(), task.getDate(), task.getText());
+        String text = String.format(message.getText(), transaction.getDate(), transaction.getText());
 
         message.setText(text);
-        message.setTo(task.getEmail());
+        message.setTo(transaction.getEmail());
 
         emailSender.send(message);
     }

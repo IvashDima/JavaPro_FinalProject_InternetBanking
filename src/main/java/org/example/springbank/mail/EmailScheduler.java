@@ -1,6 +1,7 @@
 package org.example.springbank.mail;
 
-import org.example.springbank.dto.ToNotifyDTO;
+import org.example.springbank.dto.TransactionToNotifyDTO;
+import org.example.springbank.services.TransactionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +12,16 @@ import java.util.List;
 public class EmailScheduler {
     private final EmailService emailService;
 
-    public EmailScheduler(EmailService emailService) {
+    private final TransactionService transactionService;
+
+    public EmailScheduler(EmailService emailService, TransactionService transactionService) {
         this.emailService = emailService;
+        this.transactionService = transactionService;
     }
 
     @Scheduled(fixedDelay = 60000)
     public void sendNotifications() {
-        List<ToNotifyDTO> tasks = emailService.getToNotify(new Date());
-        tasks.forEach((task) -> emailService.sendMessage(task));
+        List<TransactionToNotifyDTO> transactions = transactionService.getTransactionToNotify(new Date());
+        transactions.forEach((transaction) -> emailService.sendMessage(transaction));
     }
 }
