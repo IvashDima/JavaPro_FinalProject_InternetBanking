@@ -5,12 +5,18 @@ import java.util.Date;
 public class TransactionToNotifyDTO {
     private final String email;
     private final Date date;
-    private final String text;
+    private final String senderName;
+    private final String receiverName;
+    private final double amount;
+//    private final String type;
 
-    public TransactionToNotifyDTO(String email, Date date, String text) {
+    public TransactionToNotifyDTO(String email, Date date, String senderName, String receiverName, double amount) {
         this.email = email;
         this.date = date;
-        this.text = text;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.amount = amount;
+//        this.type = type;
     }
 
     public String getEmail() {
@@ -21,7 +27,19 @@ public class TransactionToNotifyDTO {
         return date;
     }
 
-    public String getText() {
-        return text;
+    public String getSenderName() {
+        return senderName;
     }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+//    public String getType() {
+//        return type;
+//    }
 }

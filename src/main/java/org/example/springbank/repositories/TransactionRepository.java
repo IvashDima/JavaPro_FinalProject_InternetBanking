@@ -31,7 +31,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT COUNT(c) FROM Transaction c WHERE c.receiver = :receiverAccount")
     long countByReceiverAccount(@Param("receiverAccount") Account receiverAccount);
 
-    @Query("SELECT NEW org.example.springbank.dto.TransactionToNotifyDTO(u.email, t.date, t.sender.client.name)" + //t.receiver, t.amount, t.type
+    @Query("SELECT NEW org.example.springbank.dto.TransactionToNotifyDTO(u.email, t.date, t.sender.client.name, t.receiver.client.name, t.amount)" +
             "FROM CustomUser u, Transaction t WHERE t.date >= :from AND t.date < :to")
     List<TransactionToNotifyDTO> findTransactionToNotify(@Param("from") Date from,
                                               @Param("to") Date to);
