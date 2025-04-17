@@ -29,7 +29,7 @@ public class AppConfig extends GlobalMethodSecurityConfiguration implements WebM
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setSubject("Transaction notification");
-        message.setText("Please do not forget to complete the task:\n\n [%s] %s");
+        message.setText("Transaction completed successfully:\n\n [%s] Sender: %s, Receiver: %s, Amount: %s");
         message.setFrom(fromAddress);
 
         return message;
