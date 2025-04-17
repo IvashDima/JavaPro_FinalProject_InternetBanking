@@ -20,10 +20,13 @@ public class EmailServiceImpl implements EmailService{
     public void sendMessage(TransactionToNotifyDTO transaction) {
         SimpleMailMessage message = applicationContext.getBean(SimpleMailMessage.class);
 
-        String text = String.format(message.getText(), transaction.getDate(), transaction.getText());
+        String text = String.format(message.getText(), transaction.getDate(), transaction.getSenderName(),
+                transaction.getReceiverName(), transaction.getAmount()); //, transaction.getType());
 
         message.setText(text);
         message.setTo(transaction.getEmail());
+
+        System.out.println("TEXT: " + text);
 
         emailSender.send(message);
     }
