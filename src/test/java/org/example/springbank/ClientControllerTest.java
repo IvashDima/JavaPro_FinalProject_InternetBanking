@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,7 +43,7 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void shouldReturnListOfClients_whenGetClients() throws Exception {
+    public void shouldReturnListOfClients_whenGetClientsController() throws Exception {
         when(clientMockService.getAllClients()).thenReturn(Arrays.asList(client1, client2));
 
         mockMvc.perform(get("/client/api")
@@ -55,8 +54,8 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void shouldReturnClient_whenGetClientByNameExists() throws Exception {
-        when(clientMockService.getByName("Dima")).thenReturn(Optional.of(client1));
+    public void shouldReturnClient_whenGetClientByNameExistsController() throws Exception {
+        when(clientMockService.getByName("Dima")).thenReturn((client1));
 
         mockMvc.perform(get("/client/api/name/Dima")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -65,12 +64,12 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void shouldReturnError_whenGetClientByNameNotExists() throws Exception {
-        when(clientMockService.getByName("Unknown")).thenReturn(Optional.empty());
+    public void shouldReturnError_whenGetClientByNameNotExistsController() throws Exception {
+        when(clientMockService.getByName("Unknown")).thenThrow(new ClientNotFoundException("Unknown"));
 
         mockMvc.perform(get("/client/api/name/Unknown")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Client not found"));
+                .andExpect(jsonPath("$.error").value("Client not found: Unknown"));
     }
 }

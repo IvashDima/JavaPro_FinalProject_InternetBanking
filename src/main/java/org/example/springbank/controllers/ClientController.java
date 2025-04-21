@@ -34,7 +34,7 @@ public class ClientController {
     @GetMapping("/client/api/name/{name}")
     @ResponseBody
     public Client getClientByName(@PathVariable String name) {
-        return clientService.getByName(name).orElseThrow(() -> new RuntimeException("Client not found"));
+        return clientService.getByName(name);
     }
 
     @GetMapping("/client/")

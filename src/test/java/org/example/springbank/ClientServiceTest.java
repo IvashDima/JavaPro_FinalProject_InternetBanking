@@ -1,13 +1,8 @@
 package org.example.springbank;
 
-import org.example.springbank.enums.UserRegisterType;
-import org.example.springbank.enums.UserRole;
 import org.example.springbank.models.Client;
-import org.example.springbank.models.CustomUser;
 import org.example.springbank.repositories.ClientRepository;
-import org.example.springbank.repositories.UserRepository;
 import org.example.springbank.services.ClientService;
-import org.example.springbank.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +16,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +36,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void testGetAllClients() {
+    public void shouldReturnListOfClients_whenGetClientsService() {
         when(clientMockRepository.findAll()).thenReturn(Arrays.asList(client1, client2));
 
         List<Client> clients = clientMockService.getAllClients();
@@ -50,11 +44,12 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void testGetClientByName() {
+    public void shouldReturnClient_whenGetClientByNameExistsService() {
         when(clientMockRepository.findByName("Dima")).thenReturn(Optional.of(client1));
 
-        Client client = clientMockService.getByName("Dima");
-        assertNotNull(client);
-        assertEquals("dima@test.com", client.getEmail());
+        Client foundClient = clientMockService.getByName("Dima");
+
+        assertNotNull(foundClient);
+        assertEquals("dima@test.com", foundClient.getEmail());
     }
 }

@@ -1,5 +1,6 @@
 package org.example.springbank.services;
 
+import org.example.springbank.ClientNotFoundException;
 import org.example.springbank.models.Client;
 import org.example.springbank.repositories.ClientRepository;
 import org.springframework.data.domain.Pageable;
@@ -31,8 +32,9 @@ public class ClientService {
 
 
     @Transactional(readOnly=true)
-    public Optional<Client> getByName(String name) {
-        return Optional.ofNullable(clientRepository.findByName(name).orElse(null));
+    public Client getByName(String name) {
+        return clientRepository.findByName(name)
+                .orElseThrow(() -> new ClientNotFoundException(name));
     }
 
     @Transactional(readOnly=true)
