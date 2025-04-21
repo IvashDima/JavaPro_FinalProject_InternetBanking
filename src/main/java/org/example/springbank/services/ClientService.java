@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -28,9 +29,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+
     @Transactional(readOnly=true)
-    public Client getByName(String name) {
-        return clientRepository.findByName(name).orElse(null);
+    public Optional<Client> getByName(String name) {
+        return Optional.ofNullable(clientRepository.findByName(name).orElse(null));
     }
 
     @Transactional(readOnly=true)
