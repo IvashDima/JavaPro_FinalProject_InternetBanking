@@ -30,7 +30,7 @@ public class UserService{
 
     @Transactional(readOnly = true)
     public CustomUser findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     @Transactional
@@ -60,9 +60,7 @@ public class UserService{
 
     @Transactional
     public void updateUser(String email, String name) {
-        CustomUser user = userRepository.findByEmail(email);
-        if (user == null)
-            return;
+        CustomUser user = userRepository.findByEmail(email).orElse(null);
 
         user.setEmail(email);
         user.setName(name);
