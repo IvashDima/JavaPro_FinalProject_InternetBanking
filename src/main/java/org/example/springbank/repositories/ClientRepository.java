@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -16,7 +17,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByPattern(@Param("pattern") String pattern, Pageable pageable);
 
     @Query("SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    Client findByName(@Param("name") String name);
+    Optional<Client> findByName(@Param("name") String name);
 
 //     List<Client> findByNameOrEmailOrderById(String name, String email);
 //     List<Client> findByNameAndEmail(String name, String email);

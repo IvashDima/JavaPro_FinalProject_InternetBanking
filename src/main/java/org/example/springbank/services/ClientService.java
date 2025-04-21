@@ -30,7 +30,7 @@ public class ClientService {
 
     @Transactional(readOnly=true)
     public Client getByName(String name) {
-        return clientRepository.findByName(name);
+        return clientRepository.findByName(name).orElse(null);
     }
 
     @Transactional(readOnly=true)

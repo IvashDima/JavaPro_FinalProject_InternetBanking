@@ -28,10 +28,10 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void testGetClientById() {
+    public void testGetClientByName() {
         ClientRepository mockRepo = mock(ClientRepository.class);
-        when(mockRepo.findByName("Dima")).thenReturn(
-                new Client("Dima", "Berg", "1234567", "dima@test.com", "addressFamily"));
+        when(mockRepo.findByName("Dima")).thenReturn(Optional.of(
+                new Client("Dima", "Berg", "1234567", "dima@test.com", "addressFamily")));
         ClientService clientService = new ClientService(mockRepo);
 
         Client client = clientService.getByName("Dima");
