@@ -24,6 +24,16 @@ public class ClientService {
     }
 
     @Transactional(readOnly=true)
+    public List<Client> getAllClients() {
+        return clientRepository.findAll();
+    }
+
+    @Transactional(readOnly=true)
+    public Client getByName(String name) {
+        return clientRepository.findByName(name);
+    }
+
+    @Transactional(readOnly=true)
     public List<Client> findAll(Pageable pageable) {
         return clientRepository.findAll(pageable).getContent();
     }

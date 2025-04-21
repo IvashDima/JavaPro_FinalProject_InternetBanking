@@ -15,6 +15,9 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query("SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :pattern, '%'))")
     List<Client> findByPattern(@Param("pattern") String pattern, Pageable pageable);
 
+    @Query("SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    Client findByName(@Param("name") String name);
+
 //     List<Client> findByNameOrEmailOrderById(String name, String email);
 //     List<Client> findByNameAndEmail(String name, String email);
 
