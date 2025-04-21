@@ -1,5 +1,6 @@
 package org.example.springbank.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springbank.dto.CustomUserDTO;
@@ -27,6 +28,7 @@ public class CustomUser {
     @Enumerated(EnumType.STRING)
     private UserRegisterType type;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "client_id", nullable = false, unique = true)
     private Client client;
@@ -72,6 +74,22 @@ public class CustomUser {
                                     UserRegisterType type, Client client) {
         return new CustomUser(email, name, password, role,type, client);
     }
+
+    public String getName() {
+        return name;
+    }
+
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+
+    public String getEmail() {
+        return email;
+    }
+
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
 
     public void setClient(Client client) {
         this.client = client;

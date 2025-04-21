@@ -15,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +30,18 @@ public class UserController {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.clientService = clientService;
+    }
+
+    @GetMapping("/user/api")
+    @ResponseBody
+    public List<CustomUser> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/user/api/email/{email}")
+    @ResponseBody
+    public CustomUser getUserByEmail(@PathVariable String email) {
+        return userService.findByEmail(email);
     }
 
     @GetMapping("/")
