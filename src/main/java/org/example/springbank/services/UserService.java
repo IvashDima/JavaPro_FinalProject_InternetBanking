@@ -1,5 +1,6 @@
 package org.example.springbank.services;
 
+import org.example.springbank.exceptions.UserNotFoundException;
 import org.example.springbank.dto.CustomUserDTO;
 import org.example.springbank.enums.UserRegisterType;
 import org.example.springbank.enums.UserRole;
@@ -30,7 +31,8 @@ public class UserService{
 
     @Transactional(readOnly = true)
     public CustomUser findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email) //.orElse(null);
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Transactional

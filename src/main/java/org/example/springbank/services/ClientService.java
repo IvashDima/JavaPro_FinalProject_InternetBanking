@@ -1,6 +1,6 @@
 package org.example.springbank.services;
 
-import org.example.springbank.ClientNotFoundException;
+import org.example.springbank.exceptions.ClientNotFoundException;
 import org.example.springbank.models.Client;
 import org.example.springbank.repositories.ClientRepository;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {

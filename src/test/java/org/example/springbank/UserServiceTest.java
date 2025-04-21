@@ -49,7 +49,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetAllClients() {
+    public void shouldReturnListOfClients_whenGetClientsService() {
         when(clientMockRepository.findAll()).thenReturn(Arrays.asList(client1, client2));
 
         List<Client> clients = clientMockService.getAllClients();
@@ -58,17 +58,17 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetClientByName() {
+    public void shouldReturnClient_whenGetClientByNameExistsService() {
         when(clientMockRepository.findByName("Dima")).thenReturn(Optional.of(client1));
 
-        Client client = clientMockService.getByName("Dima");
+        Client foundClient = clientMockService.getByName("Dima");
 
-        assertNotNull(client);
-        assertEquals("dima@test.com", client.getEmail());
+        assertNotNull(foundClient);
+        assertEquals("dima@test.com", foundClient.getEmail());
     }
 
     @Test
-    public void testGetAllUsers() {
+    public void shouldReturnListOfUsers_whenGetUsersService() {
         when(userMockRepository.findAll()).thenReturn(Arrays.asList(customUser1, customUser2));
 
         List<CustomUser> users = userMockService.getAllUsers();
@@ -77,7 +77,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByName() {
+    public void shouldReturnUser_whenGetUserByEmailExistsService() {
         when(userMockRepository.findByEmail("dima@test.com")).thenReturn(Optional.of(customUser1));
 
         CustomUser customUser = userMockService.findByEmail("dima@test.com");

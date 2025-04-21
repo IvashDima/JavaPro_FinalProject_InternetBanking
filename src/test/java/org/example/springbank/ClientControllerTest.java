@@ -2,6 +2,7 @@ package org.example.springbank;
 
 import org.example.springbank.controllers.ClientController;
 import org.example.springbank.controllers.GlobalExceptionHandler;
+import org.example.springbank.exceptions.ClientNotFoundException;
 import org.example.springbank.models.Client;
 import org.example.springbank.services.ClientService;
 import org.junit.jupiter.api.BeforeEach;
