@@ -1,4 +1,4 @@
-# JavaPro Homework 15: Email Sender
+# JavaPro Homework 16: Rate Retriever
 
 ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen?style=for-the-badge&logo=spring-boot)
