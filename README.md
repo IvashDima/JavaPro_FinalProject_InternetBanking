@@ -9,18 +9,18 @@
 
 ## 📋 Project Description
 
-This project implements email sending via an SMTP server using Spring Boot and Spring Mail.  
-The login and password for email sending are stored separately in the `.env.properties` file.
+This project implements a Java Spring Boot application that retrieves and displays the EUR/UAH 
+exchange rate from an external API and presents it on a web page using JSP and JSTL.
 
 ---
 
 ## 🛠️ Technologies Used
 
 - Java 17
-- Spring Boot
-- Spring Mail
-- Maven
-- Gmail SMTP Server
+- Spring Boot 
+- JSTL 
+- Maven 
+- Fixer API (for currency rates)
 
 ---
 
@@ -28,29 +28,23 @@ The login and password for email sending are stored separately in the `.env.prop
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/IvashDima/JavaPro_HW15_Email.git
+   git clone https://github.com/IvashDima/JavaPro_HW16_RateRetriever.git
 
 2. **Navigate to the project directory:**
    ```bash
-   cd JavaPro_HW15_Email
+   cd JavaPro_HW16_RateRetriever
 
-3. **Create a .env.properties file in the project root:**
-
-   ```properties
-   spring.mail.username=your_email@gmail.com
-   spring.mail.password=your_password
-   spring.security.oauth2.client.registration.google.client-id=your_client-id
-   spring.security.oauth2.client.registration.google.client-secret=your_client-secret
-
-4. **Run the application:**
+3. **Run the application:**
 
    ```bash
    mvn spring-boot:run
 
+4. **Visit http://localhost:8886/ to view the exchange rate.** 
+
 ## 📌 Important Notes
 
-   To use Gmail SMTP, you must allow access for less secure apps or use an App Password if you have two-factor authentication enabled.
-   If emails are not being sent, double-check your Gmail security settings.
+Make sure to handle exceptions gracefully if the exchange rate is unavailable.
+The /rate endpoint retrieves the EUR/UAH rate, which can be updated via the button on the webpage.
 
 
 ## 👨‍💻 Author
