@@ -49,7 +49,7 @@ public class UserControllerTest {
         customUser1 = new CustomUser("dima@test.com", "Dima", encoder.encode("password"), UserRole.USER, UserRegisterType.FORM, client1);
         customUser2 = new CustomUser("iryna@test.com", "Iryna", encoder.encode("password"), UserRole.USER, UserRegisterType.FORM, client2);
 
-        userController = new UserController(userMockService, encoder, clientMockService);
+        userController = new UserController(userMockService, encoder, clientMockService, null);
         clientController = new ClientController(clientMockService, null);
         mockMvc = MockMvcBuilders.standaloneSetup(userController, clientController)
                 .setControllerAdvice(new GlobalExceptionHandler())

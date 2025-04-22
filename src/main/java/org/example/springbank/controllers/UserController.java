@@ -1,8 +1,10 @@
 package org.example.springbank.controllers;
 
 import org.example.springbank.enums.UserRole;
+import org.example.springbank.json.Rate;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.CustomUser;
+import org.example.springbank.retrievers.RateRetriever;
 import org.example.springbank.services.ClientService;
 import org.example.springbank.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,10 +28,13 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ClientService clientService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService) {
+    private final RateRetriever rateRetriever;
+
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService, RateRetriever rateRetriever) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.clientService = clientService;
+        this.rateRetriever = rateRetriever;
     }
 
     @GetMapping("/user/api")
@@ -91,6 +96,13 @@ public class UserController {
         } else {
             throw new IllegalStateException();
         }
+
+        Rate rateData = null;
+        try {
+//            rateData = rateRetriever.getRate();
+        } catch (Exception e) {
+        }
+        model.addAttribute("rateData", rateData);
         return "index";
     }
 

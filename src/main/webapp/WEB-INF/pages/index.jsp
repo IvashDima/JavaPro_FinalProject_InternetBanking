@@ -15,6 +15,18 @@
 <body>
 <div align="center">
     <h1>Wellcome to the system :) </h1>
+    <h2>
+        <span id="rate">
+        ${rateData != null ? rateData.rates.uah : 'Not given'}
+        </span>
+    </h2>
+    <p class="lead">
+        Rate Euro to Hryvna on <div class="lead" id="date"> ${rateData != null ? rateData.date : 'Not given'} </div>
+    </p>
+
+    <form action="/rate" method="get">
+        <button type="submit">Get EUR/UAH rate</button>
+    </form>
 
     <h3>Hi ${email}! Please, choose option:</h3>
 
