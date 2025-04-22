@@ -33,11 +33,12 @@ public class AuthHandler implements AuthenticationSuccessHandler {
 
         String email = (String) attributes.getOrDefault("email", "");
 
-        System.out.println("User attributes: " + attributes);
+        System.out.println("User email: " + email);
 
         CustomUser user = userService.findByEmail(email);
 
         if (user == null) {
+            System.out.println("user == null" + user);
             CustomUserDTO userDTO = CustomUserDTO.of(
                     (String) attributes.get("email"),
                     (String) attributes.get("name"),
@@ -47,6 +48,7 @@ public class AuthHandler implements AuthenticationSuccessHandler {
             userService.addGoogleUser(userDTO);
             httpServletResponse.sendRedirect("/");
         } else {
+            System.out.println("user == null else");
             if (user.getType().equals(UserRegisterType.GOOGLE)) {
                 httpServletResponse.sendRedirect("/");
             } else {

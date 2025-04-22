@@ -31,7 +31,12 @@ public class UserService{
 
     @Transactional(readOnly = true)
     public CustomUser findByEmail(String email) {
-        return userRepository.findByEmail(email) //.orElse(null);
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public CustomUser getByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 

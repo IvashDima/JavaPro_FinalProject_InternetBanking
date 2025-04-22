@@ -90,7 +90,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnUser_whenGetUserByEmailExistsController() throws Exception {
-        when(userMockService.findByEmail("dima@test.com")).thenReturn((customUser1));
+        when(userMockService.getByEmail("dima@test.com")).thenReturn((customUser1));
 
         mockMvc.perform(get("/user/api/email/dima@test.com")
                         .contentType(MediaType.APPLICATION_JSON))

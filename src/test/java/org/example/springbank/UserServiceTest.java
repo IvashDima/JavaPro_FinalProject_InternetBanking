@@ -80,7 +80,7 @@ public class UserServiceTest {
     public void shouldReturnUser_whenGetUserByEmailExistsService() {
         when(userMockRepository.findByEmail("dima@test.com")).thenReturn(Optional.of(customUser1));
 
-        CustomUser customUser = userMockService.findByEmail("dima@test.com");
+        CustomUser customUser = userMockService.getByEmail("dima@test.com");
 
         assertNotNull(customUser);
         assertEquals("Dima", customUser.getName());
