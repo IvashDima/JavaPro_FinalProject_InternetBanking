@@ -59,7 +59,7 @@
         <nav th:if="${allPages != null}" aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:each="i : ${#numbers.sequence(1, allPages)}">
-                    <a class="page-link" th:href="@{/client(page=${i-1})}" th:text="${i}"></a>
+                    <a class="page-link" th:href="@{/client(page=${i - 1})}" th:text="${i}"></a>
                 </li>
             </ul>
         </nav>
