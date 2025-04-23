@@ -1,120 +1,144 @@
-# JavaPro Final Project: Internet Banking
+# Internet Banking System
 
-![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen?style=for-the-badge&logo=spring-boot)
-![Build](https://img.shields.io/badge/Build-Maven-blue?style=for-the-badge&logo=apache-maven)
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen?style=for-the-badge&logo=springboot)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.1.2-blueviolet?style=for-the-badge&logo=thymeleaf)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-purple?style=for-the-badge&logo=bootstrap)
+![Maven](https://img.shields.io/badge/Maven-Build-blue?style=for-the-badge&logo=apachemaven)
 ![License](https://img.shields.io/badge/License-Educational-lightgrey?style=for-the-badge)
 
-📩 **A Java Spring Boot application for demonstrating:**
-- Spring Security authentication
-- Google OAuth2 authentication integration
-- Rates retriever integration
-- Sending email messages
 
-## 📋 Project Description
+**Java Spring Boot application simulating an Internet Banking System**
 
-This project implements a Java Spring Boot application.
-User can open an account, make deposit an account and transfer between accounts, if currencies are different,
-automatically exchange by rate.
-However, an application retrieves and displays the EUR/UAH exchange rate from an external API 
-and presents it on a web page using HTML and Thymeleaf.
+## 🚀 About the Project
 
-Admin can manage users and clients.
+This project allows you to:
 
-This project implements email sending via an SMTP server using Spring Mail.
-The login and password for email sending are stored separately in the .env.properties file.
+- Open bank accounts
+- Make deposits
+- Transfer funds between accounts (with automatic currency conversion)
+- Manage users (admin functionality)
+- Integrate authentication via Google OAuth2
+- Send email notifications
+
+The project uses an external API to retrieve exchange rates (EUR/UAH) and 
+displays data via a web interface (HTML + Thymeleaf).
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Technology Stack
 
 - Java 17
 - Spring Boot 3.2
-- Spring Security
-  Spring Security OAuth2 Client
+- Spring Security + OAuth2 Client
 - Spring Mail
+- Thymeleaf + Bootstrap 5
 - Maven
-- Thymeleaf & Bootstrap 5
-- Gmail SMTP Server
-- Google OAuth2 API
-- Fixer API (for currency rates)
+- Gmail SMTP
+- Fixer API (for exchange rates)
 
 ---
 
-## 🚀 Quick Start
+## ⚙️ Quick Start
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/IvashDima/JavaPro_HW16_RateRetriever.git
+1. Clone the repository:
 
-2. **Navigate to the project directory:**
    ```bash
-   cd JavaPro_HW16_RateRetriever
+   git clone https://github.com/IvashDima/JavaPro_FinalProject_InternetBanking.git
+   cd JavaPro_FinalProject_InternetBanking
+   ```
 
-3. **Create a .env.properties file in the project root:**
-   ```bash
+2. Create a `.env.properties` file in the project root with the following contents:
+
+   ```properties
    spring.mail.username=your_email@gmail.com
    spring.mail.password=your_password
    spring.security.oauth2.client.registration.google.client-id=your_client-id
-   spring.security.oauth2.client.registration.google.client-secret=your_client-secret
+   spring.security.oauth2.client.registration.google.client-secret=your-client-secret
+   ```
+3. Set up your Google Cloud Console OAuth2 credentials with Authorized redirect URIs like:
 
-⚠️ Important: Set your Authorized redirect URIs in Google Cloud Console correctly. 
-Example: http://localhost:8886/login/oauth2/code/google
+   ```
+   http://localhost:8886/login/oauth2/code/google
+   ```
 
-4. **Run the application:**
+4. Run the application:
 
    ```bash
    mvn spring-boot:run
+   ```
 
-5. **Access the application Open your browser and navigate to:**
-   
+5. Open in your browser:
+
+   ```
    http://localhost:8886/
+   ```
 
-You will be redirected to the login page.
+---
+## 📷 Screenshots
+
+![Login Page](assets/login-page.png)
+
+---
 
 ## 📂 Project Structure
 
-      src/
-      └── main/
-         ├── java/
-         │    └── org/example/springbank/
-         │         ├── config/            # AppConfig, Spring security & OAuth2 security configuration
-         │         ├── controllers/       # Controllers handling HTTP & API requests
-         │         ├── dto/               # DTO for OAuth2 (results, user) & Mail notification
-         │         ├── enums/             # OAuth2 security configuration
-         │         ├── exceptions/        # OAuth2 security configuration
-         │         ├── json/              # OAuth2 security configuration
-         │         ├── mail/              # OAuth2 security configuration
-         │         ├── models/            # OAuth2 security configuration
-         │         ├── repositories/      # OAuth2 security configuration
-         │         ├── retrievers/        # OAuth2 security configuration
-         │         ├── services/          # OAuth2 security configuration
-         │         └── Application.java   # Main application class
-         └── resources/
-               ├── templates/             # HTML templates
-               └── application.properties # Application configuration
+```text
+src/main/
+├── java/org/example/springbank/
+│   ├── config/                 # Application and security configuration
+│   ├── controllers/            # Request controllers
+│   ├── dto/                    # Data Transfer Objects
+│   ├── enums/                  # Enumerations
+│   ├── exceptions/             # Exception handling
+│   ├── json/                   # JSON-related functionality
+│   ├── mail/                   # Email service
+│   ├── models/                 # Data models
+│   ├── repositories/           # Database repositories
+│   ├── retrievers/             # External data retrievers (e.g., currency rates)
+│   ├── services/               # Business logic
+│   └── Application.java        # Main application entry point
+└── resources/
+    ├── templates/              # Thymeleaf templates
+    └── application.properties  # Application configuration
+```
+
+---
 
 ## 📌 Important Notes
 
-Google might require OAuth2 consent screen verification for apps requesting sensitive scopes.
-Always protect sensitive information (like client secret) in production (use environment variables, vaults, etc.).
-This project is educational and focuses on OAuth2 integration basics.
+- This is a student project created as part of a Java Pro course.
+- Designed for demonstration purposes for potential employers, recruiters, and teachers.
+- Focused on implementing clean architecture, security practices, and basic external API integrations.
+- Sensitive credentials should always be protected using environment variables or secret managers.
+- Google OAuth2 may require consent screen verification when sensitive data access is involved.
+- The application is fully runnable locally without the need for a paid external API.
 
-To use Gmail SMTP, you must allow access for less secure apps or use an App Password if you have two-factor authentication enabled. 
-If emails are not being sent, double-check your Gmail security settings.
+---
 
-Make sure to handle exceptions gracefully if the exchange rate is unavailable.
-The /rate endpoint retrieves the EUR/UAH rate, which can be updated via the button on the webpage.
+## 📬 Contact
 
+GitHub: [IvashDima](https://github.com/IvashDima)
 
-## 👨‍💻 Author
-
-Name: Dmytro Ivashchenko
+LinkedIn: [Dmytro Ivashchenko](https://www.linkedin.com/in/dmytro-ivashchenko/)
 
 Email: dnytsyk@gmail.com
+
+Feel free to reach out if you have any questions or suggestions!
+
+---
 
 ## 📝 License
 
 This project is provided for educational purposes only and does not have a specific license.
-Feel free to use and adapt it for your learning and personal projects!
+
+Feel free to contribute, suggest improvements, or fork the project! 🚀
+
+## 🎯 Future Improvements
+
+- Add UI screenshots
+- Add FAQ section (e.g., common OAuth issues)
+- Add Contact section (GitHub/LinkedIn profile, email)
+- Add Project Status (e.g., In Development / Completed)
+
 
