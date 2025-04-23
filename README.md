@@ -134,11 +134,20 @@ This project is provided for educational purposes only and does not have a speci
 
 Feel free to contribute, suggest improvements, or fork the project! 🚀
 
-## 🎯 Future Improvements
+---
 
-- Add UI screenshots
-- Add FAQ section (e.g., common OAuth issues)
-- Add Contact section (GitHub/LinkedIn profile, email)
-- Add Project Status (e.g., In Development / Completed)
+## ❓ FAQ
+
+**Q: OAuth2 login isn't working. What should I check?**  
+A: Make sure the redirect URI in your Google Cloud Console matches the one in the app exactly.
+
+**Q: Emails are not sent.**  
+A: Ensure your Gmail account allows less secure apps or use App Passwords. 
+Also, there is a delay of a few minutes before the email is sent. 
+
+**Q: Emails are not received.**
+A: Ensure that your transaction is successful (the email is sent only after the transaction is successfully completed). 
+Also, check your spam folder.
+
 
 

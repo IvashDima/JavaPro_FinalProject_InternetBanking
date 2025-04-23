@@ -7,8 +7,6 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
-src/main/resources/application.properties
-
 
 ### STS ###
 .apt_generated
