@@ -28,7 +28,7 @@ public class AccountController {
     }
 
     @GetMapping("/")
-    public String index(Model model,
+    public String listAllAccounts(Model model,
                         @RequestParam(required = false, defaultValue = "0") Integer page){
         if (page < 0) page = 0;
 
@@ -43,7 +43,7 @@ public class AccountController {
     }
 
     @GetMapping("/client/{id}")
-    public String listAccount(
+    public String listAccountsByClient(
             @PathVariable(value = "id") long clientId,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             Model model)

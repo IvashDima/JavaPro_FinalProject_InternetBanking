@@ -32,7 +32,7 @@ public class TransactionController {
     }
 
     @GetMapping("/")
-    public String index(Model model,
+    public String listAllTransactions(Model model,
             @RequestParam(required = false, defaultValue = "0") Integer page)
     {
         if (page < 0) page = 0;
@@ -46,7 +46,7 @@ public class TransactionController {
     }
 
     @GetMapping("/account/{id}")
-    public String listTransaction(
+    public String listTransactionsByAccount(
             @PathVariable(value = "id") long accountId,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             Model model)
