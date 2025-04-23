@@ -62,9 +62,11 @@ public class AccountController {
         return "account/index";
     }
 
-    @GetMapping("/account_add_page")
-    public String accountAddPage(Model model) {
+    @GetMapping("/account_add_page/{id}")
+    public String accountAddPage(Model model,
+                                 @PathVariable(value = "id") long clientId) {
         model.addAttribute("clients", accountService.findClients());
+        model.addAttribute("client", accountService.findClient(clientId));
         model.addAttribute("currencies", CurrencyType.values());
         return "account/account_add_page";
     }

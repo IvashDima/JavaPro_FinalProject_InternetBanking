@@ -16,7 +16,7 @@
             <div class="container-fluid">
                 <a th:href="@{/transaction/deposit_page/{id}(id=${accountId})}" class="btn btn-primary me-2">Deposit</a>
                 <a th:href="@{/transaction/transfer_page/{id}(id=${accountId})}" class="btn btn-secondary me-2">Transfer</a>
-                <a href="/transaction/reset" class="btn btn-danger">Reset Demo Data</a>
+                <a href="/transaction/reset" class="btn btn-warning me-3">Reset Demo Data</a>
                 <form class="d-flex" role="search" th:action="@{/transaction/search}" method="post">
                     <input type="text" class="form-control me-2" name="pattern" placeholder="Search by amount">
                     <button type="submit" class="btn btn-outline-success">Search</button>
