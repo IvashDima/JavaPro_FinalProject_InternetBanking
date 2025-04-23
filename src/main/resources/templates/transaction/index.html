@@ -49,11 +49,27 @@
             </table>
         </div>
 
-        <nav th:if="${allPages != null}" aria-label="Page navigation" class="mt-4">
+        <nav th:if="${allPages != null or byAccountPages != null}" aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
-                <li class="page-item" th:each="i : ${#numbers.sequence(1, allPages)}">
-                    <a class="page-link" th:href="@{/transaction(page=${i - 1})}" th:text="${i}"></a>
-                </li>
+                <th:block th:if="${allPages != null}">
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(1, allPages)}">
+                        <a class="page-link"
+                           th:href="@{/transaction/(page=${i - 1})}"
+                           th:text="${i}">
+                        </a>
+                    </li>
+                </th:block>
+
+                <th:block th:if="${byAccountPages != null}">
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(1, byAccountPages)}">
+                        <a class="page-link"
+                           th:href="@{/transaction/account/{accountId}(accountId=${accountId}, page=${i - 1})}"
+                           th:text="${i}">
+                        </a>
+                    </li>
+                </th:block>
             </ul>
         </nav>
     </div>
