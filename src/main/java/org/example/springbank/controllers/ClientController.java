@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/client")
 public class ClientController {
 
     static final int ITEMS_PER_PAGE = 5;
@@ -25,19 +26,19 @@ public class ClientController {
         this.demoDataService = demoDataService;
     }
 
-    @GetMapping("/client/api")
+    @GetMapping("/api")
     @ResponseBody
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
 
-    @GetMapping("/client/api/name/{name}")
+    @GetMapping("/api/name/{name}")
     @ResponseBody
     public Client getClientByName(@PathVariable String name) {
         return clientService.getByName(name);
     }
 
-    @GetMapping("/client/")
+    @GetMapping("/")
     public String index(Model model,
                         @RequestParam(required = false, defaultValue = "0") Integer page){
         if(page < 0) page = 0;
@@ -49,12 +50,12 @@ public class ClientController {
         return "/client/index";
     }
 
-    @GetMapping("/client/client_add_page")
+    @GetMapping("/client_add_page")
     public String clientAddPage() {
         return "client/client_add_page";
     }
 
-    @PostMapping(value="/client/add")
+    @PostMapping(value="/add")
     public String clientAdd(@RequestParam String name,
                             @RequestParam String surname,
                             @RequestParam String phone,
@@ -67,13 +68,13 @@ public class ClientController {
         return "redirect:/client/";
     }
 
-    @GetMapping("/client/reset")
+    @GetMapping("/reset")
     public String resetDemoData() {
         demoDataService.generateDemoData();
         return "redirect:/client/";
     }
 
-    @PostMapping(value = "/client/delete")
+    @PostMapping(value = "/delete")
     public ResponseEntity<Void> delete(
             @RequestParam(value = "toDelete[]", required = false) long[] toDelete) {
         if (toDelete != null && toDelete.length > 0)
@@ -82,7 +83,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/client/search")
+    @PostMapping(value = "/search")
     public String search(@RequestParam String pattern, Model model) {
         model.addAttribute("clients", clientService.findByPattern(pattern, null));
 

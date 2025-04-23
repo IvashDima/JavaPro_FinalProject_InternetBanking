@@ -9,13 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Controller
+@RequestMapping("/account")
 public class AccountController {
     static final int DEFAULT_CLIENT_ID = -1;
     static final int ITEMS_PER_PAGE = 5;
@@ -28,7 +27,7 @@ public class AccountController {
         this.demoDataService = demoDataService;
     }
 
-    @GetMapping("/account/")
+    @GetMapping("/")
     public String index(Model model,
                         @RequestParam(required = false, defaultValue = "0") Integer page){
         if (page < 0) page = 0;
@@ -43,7 +42,7 @@ public class AccountController {
         return "/account/index";
     }
 
-    @GetMapping("/account/client/{id}")
+    @GetMapping("/client/{id}")
     public String listAccount(
             @PathVariable(value = "id") long clientId,
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -63,14 +62,14 @@ public class AccountController {
         return "account/index";
     }
 
-    @GetMapping("/account/account_add_page")
+    @GetMapping("/account_add_page")
     public String accountAddPage(Model model) {
         model.addAttribute("clients", accountService.findClients());
         model.addAttribute("currencies", CurrencyType.values());
         return "account/account_add_page";
     }
 
-    @PostMapping(value="/account/add")
+    @PostMapping(value="/add")
     public String accountAdd(@RequestParam(value = "client") long clientId,
                              @RequestParam double balance,
                              @RequestParam CurrencyType currency)
@@ -83,13 +82,13 @@ public class AccountController {
         return "redirect:/account/";
     }
 
-    @GetMapping("/account/reset")
+    @GetMapping("/reset")
     public String resetDemoData() {
         demoDataService.generateDemoData();
         return "redirect:/account/";
     }
 
-    @PostMapping(value = "/account/search")
+    @PostMapping(value = "/search")
     public String search(@RequestParam String pattern, Model model) {
         model.addAttribute("clients", accountService.findClients());
         model.addAttribute("accounts", accountService.findByPattern(pattern, null));

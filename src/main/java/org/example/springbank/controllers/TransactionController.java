@@ -12,14 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/transaction")
 public class TransactionController {
     static final int ITEMS_PER_PAGE = 10;
 
@@ -33,7 +31,7 @@ public class TransactionController {
         this.demoDataService = demoDataService;
     }
 
-    @GetMapping("/transaction/")
+    @GetMapping("/")
     public String index(Model model,
             @RequestParam(required = false, defaultValue = "0") Integer page)
     {
@@ -47,7 +45,7 @@ public class TransactionController {
         return "/transaction/index";
     }
 
-    @GetMapping("/transaction/account/{id}")
+    @GetMapping("/account/{id}")
     public String listTransaction(
             @PathVariable(value = "id") long accountId,
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -67,7 +65,7 @@ public class TransactionController {
         return "transaction/index";
     }
 
-    @GetMapping("/transaction/deposit_page/{id}")
+    @GetMapping("/deposit_page/{id}")
     public String transactionDepositPage(Model model,
                                          @PathVariable(value = "id") long accountId) {
         model.addAttribute("accounts", transactionService.findAccounts());
@@ -75,7 +73,7 @@ public class TransactionController {
         return "transaction/deposit_page";
     }
 
-    @PostMapping(value="/transaction/deposit")
+    @PostMapping(value="/deposit")
     public String transactionDeposit(@RequestParam(value = "fromaccount") long accountId,
                                      @RequestParam double amount)
     {
@@ -87,7 +85,7 @@ public class TransactionController {
         return "redirect:/transaction/account/" + accountId;
     }
 
-    @GetMapping("/transaction/transfer_page/{id}")
+    @GetMapping("/transfer_page/{id}")
     public String transactionTransferPage(Model model,
                                          @PathVariable(value = "id") long accountId) {
         model.addAttribute("accounts", transactionService.findAccounts());
@@ -95,7 +93,7 @@ public class TransactionController {
         return "transaction/transfer_page";
     }
 
-    @PostMapping(value="/transaction/transfer")
+    @PostMapping(value="/transfer")
     public String transactionTransfer(@RequestParam(value = "fromaccount") long fromAccountId,
                                       @RequestParam(value = "toaccount") long toAccountId,
                                       @RequestParam double amount)
@@ -109,13 +107,13 @@ public class TransactionController {
         return "redirect:/transaction/account/" + fromAccountId;
     }
 
-    @GetMapping("/transaction/reset")
+    @GetMapping("/reset")
     public String resetDemoData() {
         demoDataService.generateDemoData();
         return "redirect:/transaction/";
     }
 
-    @PostMapping(value = "/transaction/search")
+    @PostMapping(value = "/search")
     public String search(@RequestParam String pattern, Model model) {
         model.addAttribute("accounts", transactionService.findAccounts());
         model.addAttribute("transactions", transactionService.findByPattern(pattern, null));
