@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/user/api/email/{email}")
     @ResponseBody
     public CustomUser getUserByEmail(@PathVariable String email) {
-        return userService.findByEmail(email);
+        return userService.getByEmail(email);
     }
 
     @GetMapping("/")
