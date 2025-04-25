@@ -16,15 +16,16 @@
                         </h3>
 
                         <form th:action="@{/account/add}" method="post" class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label for="client" class="form-label">Select Client</label>
-                                <select id="client" name="client" class="form-select">
-                                    <option value="-1">Default</option>
-                                    <th:block th:each="client : ${clients}">
-                                        <option th:value="${client.id}" th:text="${client.name}"></option>
-                                    </th:block>
-                                </select>
-                            </div>
+                            <input type="hidden" name="clientId" th:value="${client.id}" />
+<!--                            <div class="mb-3">-->
+<!--                                <label for="client" class="form-label">Select Client</label>-->
+<!--                                <select id="client" name="client" class="form-select">-->
+<!--                                    <option value="-1">Default</option>-->
+<!--                                    <th:block th:each="client : ${clients}">-->
+<!--                                        <option th:value="${client.id}" th:text="${client.name}"></option>-->
+<!--                                    </th:block>-->
+<!--                                </select>-->
+<!--                            </div>-->
 
                             <div class="mb-3">
                                 <label for="balance" class="form-label">Initial Balance</label>

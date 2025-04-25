@@ -72,7 +72,7 @@ public class AccountController {
     }
 
     @PostMapping(value="/add")
-    public String accountAdd(@RequestParam(value = "client") long clientId,
+    public String accountAdd(@RequestParam(value = "clientId") long clientId,
                              @RequestParam double balance,
                              @RequestParam CurrencyType currency)
     {
@@ -81,7 +81,7 @@ public class AccountController {
         Account account = new Account(client, balance, currency);
         accountService.addAccount(account);
 
-        return "redirect:/account/";
+        return "redirect:/account/client/" + clientId;
     }
 
     @GetMapping("/reset")
