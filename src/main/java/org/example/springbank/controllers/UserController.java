@@ -19,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,58 +50,12 @@ public class UserController {
     public CustomUser getUserByEmail(@PathVariable String email) {
         return userService.getByEmail(email);
     }
-
     @GetMapping("/")
     public String index(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof User) {
-            User user = (User) principal;
-            String email = user.getUsername();
-            CustomUser dbUser = userService.findByEmail(email);
-
-            if (dbUser != null) {
-                model.addAttribute("email", dbUser.getEmail());
-
-                Client client = dbUser.getClient();
-                if (client != null){
-                    model.addAttribute("clientid", client.getId());
-                } else{
-                    throw new IllegalStateException("Client not associated with user: " + email);
-                }
-            } else {
-                throw new UsernameNotFoundException("User not found with email: " + email);
-            }
-
-        } else if (principal instanceof DefaultOidcUser) {
-            DefaultOidcUser oAuth2User = (DefaultOidcUser) principal;
-            String email = (String) oAuth2User.getAttributes().get("email");
-            CustomUser dbUser = userService.findByEmail(email);
-
-            List<GrantedAuthority> roles = oAuth2User.getAuthorities().stream()
-                    .filter(authority -> authority.getAuthority().startsWith("ROLE_"))
-                    .collect(Collectors.toList());
-
-            if (dbUser != null) {
-                model.addAttribute("email", dbUser.getEmail());
-
-                Client client = dbUser.getClient();
-                if (client != null){
-                    model.addAttribute("clientid", client.getId());
-                } else{
-                    throw new IllegalStateException("Client not associated with user: " + email);
-                }
-            } else {
-                throw new UsernameNotFoundException("User not found with email: " + email);
-            }
-        } else {
-            throw new IllegalStateException();
-        }
-
+        resolveUserAndAddAttributes(model, false);
         Rate rateData = null;
         try {
-//            rateData = rateRetriever.getRate();
+//        rateData = rateRetriever.getRate();
         } catch (Exception e) {
         }
         model.addAttribute("rateData", rateData);
@@ -108,80 +64,12 @@ public class UserController {
 
     @GetMapping("/user_profile")
     public String profile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof User) {
-            User user = (User) principal;
-            String email = user.getUsername();
-            CustomUser dbUser = userService.findByEmail(email);
-
-            if (dbUser != null) {
-                model.addAttribute("email", dbUser.getEmail());
-                model.addAttribute("roles", user.getAuthorities());
-                model.addAttribute("admin", isAdmin(user));
-                model.addAttribute("name", dbUser.getName());
-
-                Client client = dbUser.getClient();
-                if (client != null){
-                    model.addAttribute("clientid", client.getId());
-                    model.addAttribute("phone", client.getPhone());
-                    model.addAttribute("address", client.getAddress());
-
-                } else{
-                    throw new IllegalStateException("Client not associated with user: " + email);
-                }
-            } else {
-                throw new UsernameNotFoundException("User not found with email: " + email);
-            }
-
-        } else if (principal instanceof DefaultOidcUser) {
-            DefaultOidcUser oAuth2User = (DefaultOidcUser) principal;
-            String email = (String) oAuth2User.getAttributes().get("email");
-            CustomUser dbUser = userService.findByEmail(email);
-
-            List<GrantedAuthority> roles = oAuth2User.getAuthorities().stream()
-                    .filter(authority -> authority.getAuthority().startsWith("ROLE_"))
-                    .collect(Collectors.toList());
-
-            if (dbUser != null) {
-                model.addAttribute("email", dbUser.getEmail());
-                model.addAttribute("roles", roles);
-                model.addAttribute("admin", isAdmin(oAuth2User));
-                model.addAttribute("name", dbUser.getName());
-
-                Client client = dbUser.getClient();
-                if (client != null){
-                    model.addAttribute("clientid", client.getId());
-                    model.addAttribute("phone", client.getPhone());
-                    model.addAttribute("address", client.getAddress());
-
-                } else{
-                    throw new IllegalStateException("Client not associated with user: " + email);
-                }
-            } else {
-                throw new UsernameNotFoundException("User not found with email: " + email);
-            }
-        } else {
-            throw new IllegalStateException();
-        }
+        resolveUserAndAddAttributes(model, true);
         return "user_profile";
     }
 
-    @PostMapping(value = "/update")
-    public String update(@RequestParam(required = false) String name,
-                         @RequestParam(required = false) String phone,
-                         @RequestParam(required = false) String address) {
-        User user = getCurrentUser();
-
-        String email = user.getUsername();
-        userService.updateUser(email, name);
-
-        return "redirect:/";
-    }
-
     @PostMapping(value = "/newuser")
-    public String update(@RequestParam String email,
+    public String add(@RequestParam String email,
                          @RequestParam String password,
                          @RequestParam String name,
                          @RequestParam String surname,
@@ -235,42 +123,96 @@ public class UserController {
         return "admin";
     }
 
+    @PostMapping(value = "/update")
+    public String update(@RequestParam(required = false) String name,
+                         @RequestParam(required = false) String phone,
+                         @RequestParam(required = false) String address) {
+        CustomUser customUser = getCurrentCustomUser();
+        String email = customUser.getEmail();
+        customUser.getClient().setPhone(phone);
+        customUser.getClient().setAddress(address);
+
+        userService.updateUser(email, name);
+        return "redirect:/";
+    }
+
     @GetMapping("/unauthorized")
     public String unauthorized(Model model) {
-        User user = getCurrentUser();
+//        User user = getCurrentUser();
 
-        model.addAttribute("email", user.getUsername());
+        model.addAttribute("email", getCurrentUserEmail()); // user.getUsername());
         return "unauthorized";
     }
 
-    private User getCurrentUser() {
-        return (User) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
+    private CustomUser resolveUserAndAddAttributes(Model model, boolean includeDetails) {
+        String email = getCurrentUserEmail();
+        CustomUser dbUser = userService.findByEmail(email);
+
+        if (dbUser == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+
+        model.addAttribute("email", dbUser.getEmail());
+
+        if (includeDetails) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Object principal = authentication.getPrincipal();
+
+            Collection<? extends GrantedAuthority> roles = (principal instanceof DefaultOidcUser)
+                    ? ((DefaultOidcUser) principal).getAuthorities().stream()
+                    .filter(a -> a.getAuthority().startsWith("ROLE_"))
+                    .collect(Collectors.toList())
+                    : ((User) principal).getAuthorities();
+
+            model.addAttribute("roles", roles);
+            model.addAttribute("admin", isAdmin(principal));
+            model.addAttribute("name", dbUser.getName());
+        }
+
+        Client client = dbUser.getClient();
+        if (client != null) {
+            model.addAttribute("clientid", client.getId());
+            if (includeDetails) {
+                model.addAttribute("phone", client.getPhone());
+                model.addAttribute("address", client.getAddress());
+            }
+        } else {
+            throw new IllegalStateException("Client not associated with user: " + email);
+        }
+
+        return dbUser;
     }
 
-    private boolean isAdmin(User user) {
-//        Collection<GrantedAuthority> roles = user.getAuthorities();
-//
-//        for (GrantedAuthority auth : roles) {
-//            if ("ROLE_ADMIN".equals(auth.getAuthority()))
-//                return true;
-//        }
-//        return false;
-        return user.getAuthorities().stream()
-                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+    public CustomUser getCurrentCustomUser() {
+        String email = getCurrentUserEmail();
+        return userService.findByEmail(email);
     }
 
-    private boolean isAdmin(DefaultOidcUser oidcUser) {
-//        Collection<GrantedAuthority> roles = (Collection<GrantedAuthority>) oidcUser.getAuthorities();
-//
-//        for (GrantedAuthority auth : roles) {
-//            if ("ROLE_ADMIN".equals(auth.getAuthority()))
-//                return true;
-//        }
-//        return false;
-        return oidcUser.getAuthorities().stream()
+    public String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof User) {
+            return ((User) principal).getUsername();
+        } else if (principal instanceof DefaultOidcUser) {
+            return ((DefaultOidcUser) principal).getAttribute("email");
+        } else {
+            throw new IllegalStateException("Unknown principal type: " + principal.getClass());
+        }
+    }
+
+    private boolean isAdmin(Object principal) {
+        Collection<? extends GrantedAuthority> authorities;
+
+        if (principal instanceof User) {
+            authorities = ((User) principal).getAuthorities();
+        } else if (principal instanceof DefaultOidcUser) {
+            authorities = ((DefaultOidcUser) principal).getAuthorities();
+        } else {
+            throw new IllegalStateException("Unknown principal type: " + principal.getClass());
+        }
+
+        return authorities.stream()
                 .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
     }
 }
