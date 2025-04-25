@@ -19,9 +19,12 @@ public class ClientService {
 
     @Transactional
     public void addClient(Client client){
+        if (client == null || client.getName() == null) {
+            throw new IllegalArgumentException("Client or client name cannot be null.");
+        }
+
         clientRepository.save(client);
         System.out.println("CLIENT IN ClientService"+clientRepository.findByPattern(client.getName(),null));
-
     }
 
     @Transactional(readOnly=true)
@@ -29,16 +32,15 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    @Transactional(readOnly=true)
+    public List<Client> findAll(Pageable pageable) {
+        return clientRepository.findAll(pageable).getContent();
+    }
 
     @Transactional(readOnly=true)
     public Client getByName(String name) {
         return clientRepository.findByName(name)
                 .orElseThrow(() -> new ClientNotFoundException(name));
-    }
-
-    @Transactional(readOnly=true)
-    public List<Client> findAll(Pageable pageable) {
-        return clientRepository.findAll(pageable).getContent();
     }
 
     @Transactional(readOnly=true)
@@ -53,12 +55,14 @@ public class ClientService {
 
     @Transactional
     public void deleteClient(long[] idList) {
-        for (long id : idList)
-            clientRepository.deleteById(id);
+        for (long id : idList){
+            Client client = clientRepository.findById(id)
+                    .orElseThrow(() -> new ClientNotFoundException(id));
+            clientRepository.delete(client);
+        }
     }
 
     public void deleteAllClients() {
         clientRepository.deleteAll();
     }
-
 }
