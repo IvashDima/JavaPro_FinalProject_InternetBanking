@@ -14,10 +14,6 @@
                 <h3>Your roles are: <span th:text="${role}">USER</span></h3>
             </div>
 
-            <div th:if="${admin}">
-                <p><a href="/admin" class="btn btn-warning">Go to Admin Page</a></p>
-            </div>
-
             <form action="/update" method="POST" class="mt-4 mx-auto" style="max-width: 400px;">
                 <div class="mb-3">
                     <label for="email" class="form-label">E-mail:</label>
@@ -35,14 +31,11 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary rounded-3">Update</button>
+                    <a href="/" class="btn btn-secondary rounded-3">Back to Home page</a>
+                    <a href="/logout" class="btn btn-danger rounded-3">Logout</a>
                 </div>
             </form>
-
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <a th:href="@{/account/client/{clientid}(clientid=${clientid})}" class="btn btn-success">Go to your accounts</a>
-                <a href="/logout" class="btn btn-danger">Logout</a>
-            </div>
         </div>
     </div>
 

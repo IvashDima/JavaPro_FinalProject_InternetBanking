@@ -49,9 +49,10 @@ public class UserController {
     public CustomUser getUserByEmail(@PathVariable String email) {
         return userService.getByEmail(email);
     }
+
     @GetMapping("/")
     public String index(Model model) {
-        resolveUserAndAddAttributes(model, false);
+        resolveUserAndAddAttributes(model, true);
         Rate rateData = null;
         try {
 //        rateData = rateRetriever.getRate();

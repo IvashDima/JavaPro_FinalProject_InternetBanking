@@ -27,8 +27,16 @@
             Hi, <span th:text="${email}">User</span>! Please, choose option:
         </h3>
 
-        <div class="d-grid gap-2">
+        <div class="d-grid gap-2" th:if="${admin}">
+            <a href="/admin" class="btn btn-warning">Go to User List</a>
+            <a href="/client/" class="btn btn-warning">Go to Client List</a>
+        </div>
+
+        <div class="d-grid gap-2" th:if="${not admin}">
             <a th:href="@{/account/client/{id}(id=${clientid})}" class="btn btn-success">📝 Go to your accounts</a>
+        </div>
+
+        <div class="d-grid gap-2">
             <a href="/user_profile" class="btn btn-info">🛠️ Go to your profile</a>
             <a href="/logout" class="btn btn-danger">LOGOUT</a>
         </div>
