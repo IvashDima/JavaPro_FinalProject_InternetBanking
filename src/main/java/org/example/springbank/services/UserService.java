@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService{
@@ -36,6 +35,7 @@ public class UserService{
 
     @Transactional(readOnly = true)
     public CustomUser getByEmail(String email) {
+        System.out.println("Run getByEmail: " + email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
@@ -43,12 +43,18 @@ public class UserService{
     @Transactional
     public void deleteUsers(List<Long> ids) {
         ids.forEach(id -> {
-            Optional<CustomUser> user = userRepository.findById(id);
-            user.ifPresent(u -> {
-                if ( ! DemoDataService.ADMIN_LOGIN.equals(u.getEmail())) {
-                    userRepository.deleteById(u.getId());
-                }
-            });
+//            Optional<CustomUser> user = userRepository.findById(id);
+            CustomUser user = userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException(id));
+
+            if (!DemoDataService.ADMIN_LOGIN.equals(user.getEmail())) {
+                userRepository.deleteById(user.getId());
+            }
+//            user.ifPresent(u -> {
+//                if ( ! DemoDataService.ADMIN_LOGIN.equals(u.getEmail())) {
+//                    userRepository.deleteById(u.getId());
+//                }
+//            });
         });
     }
 
@@ -56,10 +62,17 @@ public class UserService{
     public boolean addUser(String email, String passHash,
                            UserRole role, Client client, //String name, String surname,
                            String name) {
-        if (email == null || client == null || userRepository.existsByEmail(email))
-            return false;
+//        if (email == null || client == null || userRepository.existsByEmail(email))
+//            return false;
+        if (email == null || client == null) {
+            throw new IllegalArgumentException("Email or Client must not be null");
+        }
 
-        System.out.println("CLIENT IN USER CREATION (addUser)!!!"+client);
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("User with email already exists: " + email);
+        }
+
+        System.out.println("CLIENT IN USER CREATION (addUser)!!! "+client);
         CustomUser user = CustomUser.create(email, name, passHash, role, UserRegisterType.FORM, client);
         userRepository.save(user);
         return true;
@@ -67,18 +80,18 @@ public class UserService{
 
     @Transactional
     public void updateUser(String email, String name) {
-        CustomUser user = userRepository.findByEmail(email).orElse(null);
+        CustomUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
 
         user.setEmail(email);
         user.setName(name);
-
         userRepository.save(user);
     }
 
     @Transactional
     public void addGoogleUser(CustomUserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail()))
-            return; // do nothing
+            return;
 
         Client client = new Client();
         client.setName(userDTO.getName());
@@ -86,12 +99,12 @@ public class UserService{
 
         clientRepository.save(client);
 
-        System.out.println("CLIENT from GOOGLE CREATION!!!"+client);
+        System.out.println("CLIENT from GOOGLE CREATION!!! "+client);
 
         CustomUser user = CustomUser.of(userDTO.getEmail(), userDTO.getName(),
                 UserRole.USER, UserRegisterType.GOOGLE, client,  userDTO.getPictureUrl());
         user.setClient(client);
-        System.out.println("USER from GOOGLE CREATION!!!"+user);
+        System.out.println("USER from GOOGLE CREATION!!! "+user);
 
         client.setUser(user);
 

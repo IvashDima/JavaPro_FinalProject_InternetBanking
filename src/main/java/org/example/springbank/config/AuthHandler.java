@@ -35,25 +35,30 @@ public class AuthHandler implements AuthenticationSuccessHandler {
 
         System.out.println("User email: " + email);
 
+        if (email.isEmpty()) {
+            System.out.println("Email is missing from OAuth2 provider.");
+            httpServletResponse.sendRedirect("/login?error");
+            return;
+        }
+
         CustomUser user = userService.findByEmail(email);
 
         if (user == null) {
-            System.out.println("user == null" + user);
+            System.out.println("User not found, creating new Google user");
             CustomUserDTO userDTO = CustomUserDTO.of(
-                    (String) attributes.get("email"),
+                    email,
                     (String) attributes.get("name"),
                     (String) attributes.get("picture")
             );
 
             userService.addGoogleUser(userDTO);
             httpServletResponse.sendRedirect("/");
+        } else if (UserRegisterType.GOOGLE.equals(user.getType())) {
+            System.out.println("Existing Google user, logging in");
+            httpServletResponse.sendRedirect("/");
         } else {
-            System.out.println("user == null else");
-            if (user.getType().equals(UserRegisterType.GOOGLE)) {
-                httpServletResponse.sendRedirect("/");
-            } else {
-                httpServletResponse.sendRedirect("/login?errorEmail");
-            }
+            System.out.println("User exists but not registered via Google");
+            httpServletResponse.sendRedirect("/login?errorEmail");
         }
     }
 }
