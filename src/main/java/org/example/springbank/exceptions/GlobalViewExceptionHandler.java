@@ -1,5 +1,6 @@
 package org.example.springbank.exceptions;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,9 @@ public class GlobalViewExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public String handleRuntimeException(RuntimeException ex, Model model) {
+        if (ex instanceof AccessDeniedException) {
+            throw (AccessDeniedException) ex;
+        }
         model.addAttribute("errorMessage", "Unexpected runtime error: " + ex.getMessage());
         return "error/500";
     }
