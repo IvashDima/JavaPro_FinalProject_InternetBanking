@@ -135,12 +135,11 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/unauthorized")
+    @GetMapping("/error/403")
     public String unauthorized(Model model) {
-//        User user = getCurrentUser();
 
-        model.addAttribute("email", getCurrentUserEmail()); // user.getUsername());
-        return "unauthorized";
+        model.addAttribute("email", getCurrentUserEmail());
+        return "error/403";
     }
 
     private CustomUser resolveUserAndAddAttributes(Model model, boolean includeDetails) {

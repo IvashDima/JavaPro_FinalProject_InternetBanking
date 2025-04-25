@@ -32,12 +32,11 @@ public class SecurityConfig {
                 .antMatchers("/").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/register","/login", "/js/**", "/css/**", "/images/**", "/favicon.ico", "/logout")
                     .permitAll()
-            //.antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
             )
             .exceptionHandling(ex -> ex
-                .accessDeniedPage("/unauthorized")
+                .accessDeniedPage("/error/403")
             )
             .formLogin(form -> form
                 .loginPage("/login")
