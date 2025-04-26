@@ -5,6 +5,7 @@ import org.example.springbank.enums.TransactionType;
 import org.example.springbank.enums.UserRole;
 import org.example.springbank.models.Account;
 import org.example.springbank.models.Client;
+import org.example.springbank.models.Loan;
 import org.example.springbank.models.Transaction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,15 @@ public class DemoDataService {
     private final UserService userService;
     private final PasswordEncoder encoder;
     private final ClientService clientService;
+    private final LoanService loanService;
     private final AccountService accountService;
     private final TransactionService transactionService;
 
-    public DemoDataService(UserService userService, PasswordEncoder encoder, ClientService clientService, AccountService accountService, TransactionService transactionService) {
+    public DemoDataService(UserService userService, PasswordEncoder encoder, ClientService clientService, LoanService loanService, AccountService accountService, TransactionService transactionService) {
         this.userService = userService;
         this.encoder = encoder;
         this.clientService = clientService;
+        this.loanService = loanService;
         this.accountService = accountService;
         this.transactionService = transactionService;
     }
@@ -41,6 +44,7 @@ public class DemoDataService {
                 UserRole.ADMIN, clientadmin, ADMIN_LOGIN);
 
         Client client;
+        Loan loan;
         Account account;
         Transaction transaction;
 
@@ -51,6 +55,11 @@ public class DemoDataService {
             userService.addUser("user" + i + "@test.com",
                     encoder.encode("password"),
                     UserRole.USER, client,"Name" + i);
+
+            for (CurrencyType currencyType : CurrencyType.values()){
+                loan = new Loan(client, 10000, currencyType);
+                loanService.addLoan(loan);
+            }
 
             for (CurrencyType currencyType : CurrencyType.values()){
                 account = new Account(client, 0, currencyType);
