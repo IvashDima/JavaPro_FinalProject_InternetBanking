@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,8 +30,9 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final ClientService clientService;
-
     private final RateRetriever rateRetriever;
+    private static final Logger logger = LoggerFactory.getLogger(RateRetriever.class);
+
 
     public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService, RateRetriever rateRetriever) {
         this.userService = userService;
@@ -55,8 +58,9 @@ public class UserController {
         resolveUserAndAddAttributes(model, true);
         Rate rateData = null;
         try {
-//        rateData = rateRetriever.getRate();
-        } catch (Exception e) {
+//            rateData = rateRetriever.getRate();
+        } catch (Exception ex) {
+            logger.error("Error while retrieving rate", ex);
         }
         model.addAttribute("rateData", rateData);
         return "index";

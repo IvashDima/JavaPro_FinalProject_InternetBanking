@@ -10,17 +10,17 @@
     <div class="card p-4 shadow-lg text-center" style="min-width: 300px;">
         <h1 class="mb-4">Welcome to your Internet Banking 🏦 </h1>
 
-        <h2 class="mb-3">
-            <span th:text="${rateData != null} ? ${rateData.rates.uah} : 'Not given'">Rate</span>
-        </h2>
-
-        <p class="lead">
-            Rate Euro to Hryvnia on
-            <span class="fw-bold" th:text="${rateData != null} ? ${rateData.date} : 'Not given'">Date</span>
+        <p class="lead">Rate on
+            <span id="dateDisplay" class="fw-bold" th:text="${rateData != null} ? ${rateData.date} : 'Not given'"></span>
         </p>
+        <h2 class="mb-3">EUR to UAH:
+            <span id="uahDisplay" th:text="${rateData != null} ? ${rateData.rates.uah} : 'Not given'"></span></h2>
 
-        <form action="/rate" method="get" class="d-grid gap-2 my-3">
-            <button type="submit" class="btn btn-primary">🚀 Get EUR/UAH rate</button>
+        <h2 class="mb-3">EUR to USD:
+            <span id="usdDisplay" th:text="${rateData != null} ? ${rateData.rates.usd} : 'Not given'"></span></h2>
+
+        <form class="d-grid gap-2 my-3">
+            <button id="loadRateButton" class="btn btn-primary">🚀 Get New Rate</button>
         </form>
 
         <h3 class="mt-4 mb-3">
@@ -44,5 +44,24 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loadRateButton').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            fetch('/rate')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    document.getElementById('dateDisplay').textContent = data.date || 'No date';
+                    document.getElementById('uahDisplay').textContent = data.rates?.UAH ?? 'No UAH rate';
+                    document.getElementById('usdDisplay').textContent = data.rates?.USD ?? 'No USD rate';
+                })
+                .catch(error => {
+                    console.error('Error fetching rates:', error);
+                    alert('Failed to load rates!');
+                });
+        });
+    </script>
 </body>
 </html>
