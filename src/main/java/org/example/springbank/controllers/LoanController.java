@@ -1,5 +1,6 @@
 package org.example.springbank.controllers;
 
+import org.example.springbank.constants.Constants;
 import org.example.springbank.enums.CurrencyType;
 import org.example.springbank.models.Account;
 import org.example.springbank.models.Client;
@@ -18,10 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/loan")
 public class LoanController {
-
-    static final int DEFAULT_CLIENT_ID = -1;
-    static final int ITEMS_PER_PAGE = 5;
-
     private final LoanService loanService;
     private final DemoDataService demoDataService;
 
@@ -36,7 +33,7 @@ public class LoanController {
         if (page < 0) page = 0;
 
         List<Loan> loans = loanService
-                .findAll(PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findAll(PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", loanService.findClients());
         model.addAttribute("loans", loans);
@@ -51,11 +48,11 @@ public class LoanController {
             @RequestParam(required = false, defaultValue = "0") Integer page,
             Model model)
     {
-        Client client = (clientId != DEFAULT_CLIENT_ID) ? loanService.findClient(clientId) : null;
+        Client client = (clientId != Constants.DEFAULT_CLIENT_ID) ? loanService.findClient(clientId) : null;
         if (page < 0) page = 0;
 
         List<Loan> loans = loanService
-                .findByClient(client, PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findByClient(client, PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", loanService.findClients());
         model.addAttribute("loans", loans);
@@ -79,7 +76,7 @@ public class LoanController {
                              @RequestParam double balance,
                              @RequestParam CurrencyType currency)
     {
-        Client client = (clientId != DEFAULT_CLIENT_ID) ? loanService.findClient(clientId) : null;
+        Client client = (clientId != Constants.DEFAULT_CLIENT_ID) ? loanService.findClient(clientId) : null;
 
         Loan loan = new Loan(client, balance, currency);
         loanService.addLoan(loan);
@@ -103,11 +100,11 @@ public class LoanController {
 
     private long getPageCount() {
         long totalCount = loanService.count();
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 
     private long getPageCount(Client client) {
         long totalCount = loanService.countByClient(client);
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 }

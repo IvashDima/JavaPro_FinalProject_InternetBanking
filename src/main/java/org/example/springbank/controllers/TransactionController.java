@@ -1,5 +1,6 @@
 package org.example.springbank.controllers;
 
+import org.example.springbank.constants.Constants;
 import org.example.springbank.enums.CurrencyType;
 import org.example.springbank.enums.TransactionType;
 import org.example.springbank.models.Account;
@@ -19,10 +20,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/transaction")
 public class TransactionController {
-    static final int ITEMS_PER_PAGE = 10;
-
-    static final int DEFAULT_ACCOUNT_ID = -1;
-
     private final TransactionService transactionService;
     private final DemoDataService demoDataService;
 
@@ -38,7 +35,7 @@ public class TransactionController {
         if (page < 0) page = 0;
 
         List<Transaction> transactions = transactionService
-                .findAll(PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findAll(PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("transactions", transactions);
         model.addAttribute("allPages", getPageCount());
@@ -51,11 +48,11 @@ public class TransactionController {
             @RequestParam(required = false, defaultValue = "0") Integer page,
             Model model)
     {
-        Account account = (accountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
+        Account account = (accountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
         if (page < 0) page = 0;
 
         List<Transaction> transactions = transactionService
-                .findByAnyAccount(account, PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findByAnyAccount(account, PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("accounts", transactionService.findAccounts());
         model.addAttribute("transactions", transactions);
@@ -77,7 +74,7 @@ public class TransactionController {
     public String transactionDeposit(@RequestParam(value = "fromaccount") long accountId,
                                      @RequestParam double amount)
     {
-        Account account = (accountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
+        Account account = (accountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
 
         Transaction transaction = new Transaction(account, account, amount, TransactionType.DEPOSIT);
         transactionService.deposit(transaction);
@@ -98,8 +95,8 @@ public class TransactionController {
                                       @RequestParam(value = "toaccount") long toAccountId,
                                       @RequestParam double amount)
     {
-        Account fromAccount = (fromAccountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(fromAccountId) : null;
-        Account toAccount = (toAccountId != DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(toAccountId) : null;
+        Account fromAccount = (fromAccountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(fromAccountId) : null;
+        Account toAccount = (toAccountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(toAccountId) : null;
 
         Transaction transaction = new Transaction(fromAccount, toAccount, amount, TransactionType.TRANSFER);
         transactionService.transfer(transaction);
@@ -123,11 +120,11 @@ public class TransactionController {
 
     private long getPageCount() {
         long totalCount = transactionService.count();
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 
     private long getPageCount(Account account) {
         long totalCount = transactionService.countByReceiverAccount(account);
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.springbank.controllers;
 
+import org.example.springbank.constants.Constants;
 import org.example.springbank.models.Client;
 import org.example.springbank.services.ClientService;
 import org.example.springbank.services.DemoDataService;
@@ -18,8 +19,6 @@ import java.util.List;
 @RequestMapping("/client")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ClientController {
-
-    static final int ITEMS_PER_PAGE = 5;
     private final ClientService clientService;
     private final DemoDataService demoDataService;
 
@@ -45,7 +44,7 @@ public class ClientController {
                         @RequestParam(required = false, defaultValue = "0") Integer page){
         if(page < 0) page = 0;
 
-        List<Client> clients = clientService.findAll(PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+        List<Client> clients = clientService.findAll(PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", clients);
         model.addAttribute("allPages", getPageCount());
@@ -94,6 +93,6 @@ public class ClientController {
 
     private long getPageCount() {
         long totalCount = clientService.count();
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 }

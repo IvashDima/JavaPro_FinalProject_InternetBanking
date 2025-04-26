@@ -1,5 +1,6 @@
 package org.example.springbank.controllers;
 
+import org.example.springbank.constants.Constants;
 import org.example.springbank.enums.CurrencyType;
 import org.example.springbank.models.Account;
 import org.example.springbank.models.Client;
@@ -16,9 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/account")
 public class AccountController {
-    static final int DEFAULT_CLIENT_ID = -1;
-    static final int ITEMS_PER_PAGE = 5;
-
     private final AccountService accountService;
     private final DemoDataService demoDataService;
 
@@ -33,7 +31,7 @@ public class AccountController {
         if (page < 0) page = 0;
 
         List<Account> accounts = accountService
-                .findAll(PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findAll(PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", accountService.findClients());
         model.addAttribute("accounts", accounts);
@@ -48,11 +46,11 @@ public class AccountController {
             @RequestParam(required = false, defaultValue = "0") Integer page,
             Model model)
     {
-        Client client = (clientId != DEFAULT_CLIENT_ID) ? accountService.findClient(clientId) : null;
+        Client client = (clientId != Constants.DEFAULT_CLIENT_ID) ? accountService.findClient(clientId) : null;
         if (page < 0) page = 0;
 
         List<Account> accounts = accountService
-                .findByClient(client, PageRequest.of(page, ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+                .findByClient(client, PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", accountService.findClients());
         model.addAttribute("accounts", accounts);
@@ -76,7 +74,7 @@ public class AccountController {
                              @RequestParam double balance,
                              @RequestParam CurrencyType currency)
     {
-        Client client = (clientId != DEFAULT_CLIENT_ID) ? accountService.findClient(clientId) : null;
+        Client client = (clientId != Constants.DEFAULT_CLIENT_ID) ? accountService.findClient(clientId) : null;
 
         Account account = new Account(client, balance, currency);
         accountService.addAccount(account);
@@ -100,11 +98,11 @@ public class AccountController {
 
     private long getPageCount() {
         long totalCount = accountService.count();
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 
     private long getPageCount(Client client) {
         long totalCount = accountService.countByClient(client);
-        return (totalCount / ITEMS_PER_PAGE) + ((totalCount % ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 }
