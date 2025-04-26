@@ -53,11 +53,12 @@ public class Account {
 
     @Override
     public String toString(){
-        return "Account{" +
-                "accountId="+id+", " +
-                "client='"+client.getName()+" "+client.getSurname()+"'"+
+        return "Account by " +
+//                "accountId="+id+", " +
+                "client '"+client.getName()+" "+client.getSurname()+"'"
 //              ", " +"balance="+balance+
 //              ", " +"currency="+currency+
-                "}";
+//                "}"
+                ;
     }
 }
