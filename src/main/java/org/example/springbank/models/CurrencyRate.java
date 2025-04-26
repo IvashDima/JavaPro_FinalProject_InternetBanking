@@ -1,10 +1,16 @@
 package org.example.springbank.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.springbank.enums.CurrencyType;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "CurrencyRates")
 public class CurrencyRate {
     @Id
@@ -19,28 +25,9 @@ public class CurrencyRate {
     @Column(nullable = false)
     private double rate;
 
-    public CurrencyRate(){}
-
     public CurrencyRate(CurrencyType currency, double rate){
         this.rate = rate;
         this.currency = currency;
-    }
-
-    public long getId() {
-        return id;
-    }
-    public CurrencyType getCurrency() {
-        return currency;
-    }
-    public void setCurrency(CurrencyType currency) {
-        this.currency = currency;
-    }
-    public double getRate() {
-        return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
     }
 
     @Override

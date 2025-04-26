@@ -1,12 +1,19 @@
 package org.example.springbank.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "clients")
 public class Client {
     @Id
@@ -31,61 +38,12 @@ public class Client {
     @OneToOne(mappedBy = "client", fetch = FetchType.LAZY) //cascade = CascadeType.ALL, orphanRemoval = true
     private CustomUser user;
 
-    public Client(){}
-
     public Client(String name, String surname, String phone, String email, String address){
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.email = email;
         this.address = address;
-    }
-
-    public long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public void setUser(CustomUser user) {
@@ -95,18 +53,15 @@ public class Client {
         }
     }
 
-    public CustomUser getUser() {
-        return user;
-    }
-
     @Override
     public String toString(){
-        return "Client{" +
+        return name + " " + surname
+//                "Client{" +
 //                "id="+id+", " +
-                "name='"+name+
-                ", " +"surname='"+surname+
+//                "name='"+name+
+//                ", " +"surname='"+surname+
 //              ", " +"phone='"+phone+
 //              ", " +"email='"+email+"'" +
-                "}";
+                ;
     }
 }

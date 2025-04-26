@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "customusers")
 public class CustomUser {
     @Id
@@ -34,8 +35,6 @@ public class CustomUser {
     private Client client;
 
     private String pictureUrl;
-
-    public CustomUser() {};
 
     public CustomUser(String email, String name, String password, UserRole role,
                       UserRegisterType type, Client client) {
@@ -75,20 +74,12 @@ public class CustomUser {
         return new CustomUser(email, name, password, role,type, client);
     }
 
-    public String getName() {
-        return name;
-    }
-
-//    public void setName(String name) {
-//        this.name = name;
+//    public String getName() {
+//        return name;
 //    }
-
-    public String getEmail() {
-        return email;
-    }
-
-//    public void setEmail(String email) {
-//        this.email = email;
+//
+//    public String getEmail() {
+//        return email;
 //    }
 
     public void setClient(Client client) {

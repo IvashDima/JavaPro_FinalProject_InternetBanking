@@ -1,12 +1,18 @@
 package org.example.springbank.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.springbank.enums.TransactionType;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "Transactions")
 public class Transaction {
     @Id
@@ -31,8 +37,6 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionType type;
 
-    public Transaction(){}
-
     public Transaction(Account senderAccount, Account receiverAccount, double amount, TransactionType type){
         this.date = new Date();
         this.sender = senderAccount;
@@ -41,38 +45,8 @@ public class Transaction {
         this.type = type;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public Account getSender() {
-        return sender;
-    }
-    public void setSender(Account senderAccount) {
-        this.sender = senderAccount;
-    }
-    public Account getReceiver() {
-        return receiver;
-    }
-    public void setReceiver(Account receiverAccount) {
-        this.receiver = receiverAccount;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
     public void updateAmount(double amount) {
         this.amount += amount;
-    }
-
-    public TransactionType getType() {
-        return type;
-    }
-    public void setType(TransactionType type) {
-        this.type = type;
     }
 
     @Override

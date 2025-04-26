@@ -1,5 +1,9 @@
 package org.example.springbank.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.springbank.enums.CurrencyType;
 
 import javax.persistence.*;
@@ -7,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "Accounts")
 public class Account {
     @Id
@@ -31,46 +38,17 @@ public class Account {
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<Transaction> rTransactions = new ArrayList<>();
 
-    public Account(){}
-
     public Account(Client client, double balance, CurrencyType currency){
         this.client = client;
         this.balance = balance;
         this.currency = currency;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
     public void deposit(double amount) {
         this.balance += amount;
     }
     public void withdraw(double amount) {
         this.balance -= amount;
-    }
-
-    public CurrencyType getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(CurrencyType currency) {
-        this.currency = currency;
     }
 
     @Override
