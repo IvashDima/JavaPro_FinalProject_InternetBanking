@@ -72,6 +72,8 @@ public class UserService{
             throw new RuntimeException("User with email already exists: " + email);
         }
 
+        clientRepository.save(client);
+
         System.out.println("CLIENT IN USER CREATION (addUser)!!! "+client);
         CustomUser user = CustomUser.create(email, name, passHash, role, UserRegisterType.FORM, client);
         userRepository.save(user);

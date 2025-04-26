@@ -68,6 +68,24 @@ public class UserController {
         return "user_profile";
     }
 
+    @PostMapping(value = "/update")
+    public String update(@RequestParam(required = false) String name,
+                         @RequestParam(required = false) String phone,
+                         @RequestParam(required = false) String address) {
+        CustomUser customUser = getCurrentCustomUser();
+        String email = customUser.getEmail();
+        customUser.getClient().setPhone(phone);
+        customUser.getClient().setAddress(address);
+
+        userService.updateUser(email, name);
+        return "redirect:/";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
     @PostMapping(value = "/newuser")
     public String add(@RequestParam String email,
                          @RequestParam String password,
@@ -86,7 +104,7 @@ public class UserController {
         client.setSurname(surname);
         client.setEmail(email);
         client.setPhone(phone);
-        client.setPhone(address);
+        client.setAddress(address);
 
         if ( ! userService.addUser(email, passHash, UserRole.USER, client, name)) {
             model.addAttribute("exists", true);
@@ -111,11 +129,6 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
-
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ROLE_ADMIN')") // SpEL !!!
     public String admin(Model model) {
@@ -123,18 +136,6 @@ public class UserController {
         return "admin";
     }
 
-    @PostMapping(value = "/update")
-    public String update(@RequestParam(required = false) String name,
-                         @RequestParam(required = false) String phone,
-                         @RequestParam(required = false) String address) {
-        CustomUser customUser = getCurrentCustomUser();
-        String email = customUser.getEmail();
-        customUser.getClient().setPhone(phone);
-        customUser.getClient().setAddress(address);
-
-        userService.updateUser(email, name);
-        return "redirect:/";
-    }
 
     @GetMapping("/error/403")
     public String unauthorized(Model model) {

@@ -41,8 +41,9 @@
                 <input type="text" id="address" name="address" class="form-control" placeholder="Enter address">
             </div>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary mt-3">Register</button>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary rounded-3">Register</button>
+                <a href="/admin" class="btn btn-secondary rounded-3">Back to User List</a>
             </div>
 
             <div class="text-danger text-center mt-3" th:if="${exists != null}">
