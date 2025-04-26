@@ -87,6 +87,12 @@ public class LoanController {
         return "redirect:/loan/client/" + clientId;
     }
 
+    @GetMapping("/reset")
+    public String resetDemoData() {
+        demoDataService.generateDemoData();
+        return "redirect:/loan/";
+    }
+
     @PostMapping(value = "/search")
     public String search(@RequestParam String pattern, Model model) {
         model.addAttribute("clients", loanService.findClients());
