@@ -34,6 +34,7 @@
 
         <div class="d-grid gap-2" th:if="${not admin}">
             <a th:href="@{/account/client/{id}(id=${clientid})}" class="btn btn-success">📝 Go to your accounts</a>
+            <a th:href="@{/loan/client/{id}(id=${clientid})}" class="btn btn-success">📝 Go to your loans</a>
         </div>
 
         <div class="d-grid gap-2">
