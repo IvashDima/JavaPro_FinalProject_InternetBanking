@@ -24,6 +24,9 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Account> account = new ArrayList<>();
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Loan> loan = new ArrayList<>();
+
     @JsonIgnore
     @OneToOne(mappedBy = "client", fetch = FetchType.LAZY) //cascade = CascadeType.ALL, orphanRemoval = true
     private CustomUser user;
