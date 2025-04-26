@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class RateRetriever {
 
     private static final String URL =
-            "http://data.fixer.io/api/latest?access_key={your_key}";
+            "http://data.fixer.io/api/latest?access_key=240ec6cbacfbd2d5e8b6cd4d11cf3510";
 
     @Cacheable("rates") // Redis
     public Rate getRate() {

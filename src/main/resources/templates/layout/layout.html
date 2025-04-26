@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Page Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img th:src="@{/logo.png}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+                Bank App
+            </a>
+            <div class="d-flex">
+                <a href="/logout" class="btn btn-outline-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div th:replace="${content}"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
