@@ -32,8 +32,8 @@ public class DemoDataService {
 
     @Transactional
     public void generateDemoData() {
-//        transactionService.deleteAllTransactions();
-//        accountService.deleteAllAccounts();
+        transactionService.deleteAllTransactions();
+        accountService.deleteAllAccounts();
 //        clientService.deleteAllClients();
 
         Client client;
