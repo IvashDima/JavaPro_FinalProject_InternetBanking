@@ -32,9 +32,10 @@ public class DemoDataService {
 
     @Transactional
     public void generateDemoData() {
-        clientService.deleteAllClients();
-        accountService.deleteAllAccounts();
         transactionService.deleteAllTransactions();
+        accountService.deleteAllAccounts();
+        clientService.deleteAllClients();
+
 
         Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "1234567", ADMIN_LOGIN + "@test.com", "address");
         System.out.println("CLIENT IN DEMO!!!"+clientadmin);
