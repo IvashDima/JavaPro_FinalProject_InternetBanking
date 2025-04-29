@@ -32,10 +32,10 @@ public class Account {
     @Column(nullable = false)
     private CurrencyType currency;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> sTransactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> rTransactions = new ArrayList<>();
 
     public Account(Client client, double balance, CurrencyType currency){
