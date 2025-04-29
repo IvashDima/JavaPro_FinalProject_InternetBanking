@@ -24,6 +24,11 @@ public class UserService{
     }
 
     @Transactional(readOnly = true)
+    public boolean adminExists() {
+        return userRepository.existsByRole(UserRole.ADMIN);
+    }
+
+    @Transactional(readOnly = true)
     public List<CustomUser> getAllUsers() {
         return userRepository.findAll();
     }

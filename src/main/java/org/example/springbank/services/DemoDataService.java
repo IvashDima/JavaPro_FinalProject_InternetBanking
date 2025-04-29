@@ -32,17 +32,9 @@ public class DemoDataService {
 
     @Transactional
     public void generateDemoData() {
-        transactionService.deleteAllTransactions();
-        accountService.deleteAllAccounts();
-        clientService.deleteAllClients();
-
-
-        Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "1234567", ADMIN_LOGIN + "@test.com", "address");
-        System.out.println("CLIENT IN DEMO!!!"+clientadmin);
-        clientService.addClient(clientadmin);
-        userService.addUser(ADMIN_LOGIN + "@test.com",
-                encoder.encode("password"),
-                UserRole.ADMIN, clientadmin, ADMIN_LOGIN);
+//        transactionService.deleteAllTransactions();
+//        accountService.deleteAllAccounts();
+//        clientService.deleteAllClients();
 
         Client client;
         Loan loan;
@@ -68,6 +60,17 @@ public class DemoDataService {
                 transaction = new Transaction(account, account, 1000, TransactionType.DEPOSIT);
                 transactionService.deposit(transaction);
             }
+        }
+    }
+
+    public void createAdminIfNotExists() {
+        if (!userService.adminExists()) {
+            Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "1234567", ADMIN_LOGIN + "@test.com", "address");
+            System.out.println("Create admin in DemoData: "+clientadmin);
+            clientService.addClient(clientadmin);
+            userService.addUser(ADMIN_LOGIN + "@test.com",
+                    encoder.encode("password"),
+                    UserRole.ADMIN, clientadmin, ADMIN_LOGIN);
         }
     }
 }
