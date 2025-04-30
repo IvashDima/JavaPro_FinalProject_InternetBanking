@@ -38,7 +38,7 @@ public class AppConfig extends GlobalMethodSecurityConfiguration implements WebM
                 .addResourceHandler("/static/**")
                 .addResourceLocations("/WEB-INF/static/");
     }
-//    @Profile("local")
+    @Profile("local")
     @Bean
     public CommandLineRunner demo(final DemoDataService demoDataService) {
         return new CommandLineRunner() {
