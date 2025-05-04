@@ -36,9 +36,11 @@
 
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+                                <input type="tel" id="phone" name="phone" class="form-control"
+                                       placeholder="Enter a phone number as +[country code][number] (12–13 digits)"
+                                       pattern="\+?\d{12,13}">
                                 <div class="invalid-feedback">
-                                    Please enter the phone number.
+                                    Phone number should have 12–13 numbers, can be «+» at the beginning.
                                 </div>
                             </div>
 
@@ -54,7 +56,7 @@
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
                                 <div class="invalid-feedback">
-                                    Please enter a valid email address.
+                                    Please, enter a valid email.
                                 </div>
                             </div>
 
