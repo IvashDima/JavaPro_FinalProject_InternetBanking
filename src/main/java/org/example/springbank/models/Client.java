@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class Client {
     @Column(name = "client_name")
     private String name;
     private String surname;
+
+    @NotBlank
+    @Pattern(regexp="\\+?\\d{12,13}", message="Phone: 12–13 numbers, can be +")
     private String phone;
+
+    @NotBlank
+    @Email(message = "Incorrect email")
     private String email;
     private String address;
 

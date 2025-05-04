@@ -17,10 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +60,7 @@ public class UserController {
         resolveUserAndAddAttributes(model, true);
         Rate rateData = null;
         try {
-//            rateData = rateRetriever.getRate();
+//            rateData = rateRetriever.getRate(); // turn on to receive rate on load page
         } catch (Exception ex) {
             logger.error("Error while retrieving rate", ex);
         }
@@ -97,11 +99,13 @@ public class UserController {
                          @RequestParam String surname,
                          @RequestParam(required = false) String phone,
                          @RequestParam(required = false) String address,
+                         @ModelAttribute @Valid CustomUser form,
+                         BindingResult binding,
                          Model model) {
         String passHash = passwordEncoder.encode(password);
 
-        //if (password.length() < 8)
-        //    return "error";
+        if (password.length() < 8)
+            return "error";
 
         Client client = new Client();
         client.setName(name);
@@ -113,6 +117,10 @@ public class UserController {
         if ( ! userService.addUser(email, passHash, UserRole.USER, client, name)) {
             model.addAttribute("exists", true);
             model.addAttribute("email", email);
+            return "register";
+        }
+
+        if (binding.hasErrors()) {
             return "register";
         }
 

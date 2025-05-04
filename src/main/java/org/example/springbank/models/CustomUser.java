@@ -8,6 +8,7 @@ import org.example.springbank.enums.UserRegisterType;
 import org.example.springbank.enums.UserRole;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Data
@@ -19,6 +20,8 @@ public class CustomUser {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank
+    @Email(message = "Incorrect email")
     @Column(nullable = false, unique = true)
     private String email; //login
     private String name;

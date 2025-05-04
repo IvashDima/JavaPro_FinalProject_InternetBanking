@@ -42,7 +42,7 @@ public class DemoDataService {
         Transaction transaction;
 
         for (int i = 1; i < 3; i++) {
-            client = new Client("Name" + i, "Surname" + i, "1234567" + i, "user" + i + "@test.com", "address"+i);
+            client = new Client("Name" + i, "Surname" + i, "12345678901" + i, "user" + i + "@test.com", "address"+i);
             clientService.addClient(client);
 
             userService.addUser("user" + i + "@test.com",
@@ -65,7 +65,7 @@ public class DemoDataService {
 
     public void createAdminIfNotExists() {
         if (!userService.adminExists()) {
-            Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "1234567", ADMIN_LOGIN + "@test.com", "address");
+            Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "123456789012", ADMIN_LOGIN + "@test.com", "address");
             System.out.println("Create admin in DemoData: "+clientadmin);
             clientService.addClient(clientadmin);
             userService.addUser(ADMIN_LOGIN + "@test.com",
