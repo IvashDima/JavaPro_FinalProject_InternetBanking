@@ -15,11 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "clients")
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
+public class Client extends BaseEntity{
 
     @Column(name = "client_name")
     private String name;

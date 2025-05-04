@@ -1,6 +1,5 @@
 package org.example.springbank.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,11 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "Accounts")
-public class Account {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
+public class Account extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)

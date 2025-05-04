@@ -12,11 +12,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Table(name = "Loans")
-public class Loan {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
+public class Loan extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -46,7 +42,7 @@ public class Loan {
     @Override
     public String toString(){
         return "Loan{" +
-                "loanId="+id+", " +
+//                "loanId="+id+", " +
                 "client='"+client.getName()+" "+client.getSurname()+"'"+
               ", " +"balance="+balance+
               ", " +"currency="+currency+

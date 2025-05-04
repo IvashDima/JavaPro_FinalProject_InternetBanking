@@ -14,11 +14,7 @@ import javax.validation.constraints.*;
 @Data
 @NoArgsConstructor
 @Table(name = "customusers")
-public class CustomUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+public class CustomUser extends BaseEntity{
 
     @NotBlank
     @Email(message = "Incorrect email")
@@ -76,14 +72,6 @@ public class CustomUser {
                                     UserRegisterType type, Client client) {
         return new CustomUser(email, name, password, role,type, client);
     }
-
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
 
     public void setClient(Client client) {
         this.client = client;

@@ -14,11 +14,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @Table(name = "Transactions")
-public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
+public class Transaction extends BaseEntity{
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm", timezone = "UTC")
     private Date date;
@@ -51,7 +47,8 @@ public class Transaction {
 
     @Override
     public String toString(){
-        return "Transaction{id="+id+", " +
+        return "Transaction{" +
+                // "id="+id+", " +
                 "senderAccount="+sender+", " +
                 "receiverAccount="+receiver+", " +
                 "amount="+amount+", " +
