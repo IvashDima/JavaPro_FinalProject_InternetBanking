@@ -23,10 +23,12 @@
 
                             <div class="mb-3">
                                 <label for="toaccount" class="form-label">Receiver Account</label>
-                                <select id="toaccount" name="toaccount" class="form-select" required>
+                                <select id="toaccount" name="toaccount" class="form-select" required onchange="handleReceiverChange()">
                                     <option value="" disabled selected>Choose account</option>
                                     <option th:each="toaccount : ${accounts}"
+                                            th:if="${toaccount.id != account.id}"
                                             th:value="${toaccount.id}"
+                                            th:attr="data-currency=${toaccount.currency}"
                                             th:text="${toaccount.id + ' - ' + toaccount.currency + ' (' + toaccount.client.name + ')'}">
                                     </option>
                                 </select>
@@ -36,10 +38,19 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="amount" class="form-label">Amount</label>
-                                <input type="number" step="0.01" min="0.01" class="form-control" id="amount" name="amount" placeholder="Enter amount" required>
+                                <label for="amount" class="form-label">Transfer amount</label>
+                                <input type="number" step="0.01" min="0.01" th:max="${account.balance}" class="form-control" id="amount" name="amount" placeholder="Enter amount" required>
                                 <div class="invalid-feedback">
                                     Please enter a valid amount.
+                                </div>
+                            </div>
+
+                            <!-- Convert if currencies are different -->
+                            <div id="conversionBlock" class="mb-3 d-none">
+                                <label for="convertedAmount" class="form-label">Converted Amount (Receiver Currency)</label>
+                                <input type="text" class="form-control" id="convertedAmount" disabled>
+                                <div class="form-text text-warning">
+                                    Approximate amount after currency conversion (rate not applied here).
                                 </div>
                             </div>
 
@@ -70,6 +81,22 @@
                 }, false)
             })
         })()
+    </script>
+    <script th:inline="javascript">
+        function handleReceiverChange() {
+            const select = document.getElementById('toaccount');
+            const selectedOption = select.options[select.selectedIndex];
+            const receiverCurrency = selectedOption.getAttribute('data-currency');
+            const senderCurrency = /*[[${account.currency}]]*/ '';
+
+            const conversionBlock = document.getElementById('conversionBlock');
+
+            if (receiverCurrency && receiverCurrency !== senderCurrency) {
+                conversionBlock.classList.remove('d-none');
+            } else {
+                conversionBlock.classList.add('d-none');
+            }
+        }
     </script>
 </body>
 </html>
