@@ -13,20 +13,20 @@
                 <div class="card shadow rounded-4">
                     <div class="card-body">
                         <h3 class="card-title text-center mb-4">
-                            New Transfer from account #<span th:text="${account.id}"></span>
-                            (<span th:text="${account.currency}"></span>)
-                            - <span th:text="${account.client.name}"></span>
+                            New Transfer from account #<span th:text="${sender.id}"></span>
+                            (<span th:text="${sender.currency}"></span>)
+                            - <span th:text="${sender.client.name}"></span>
                         </h3>
 
                         <form th:action="@{/transaction/transfer}" method="post" class="needs-validation" novalidate>
-                            <input type="hidden" name="fromaccount" th:value="${account.id}" />
+                            <input type="hidden" name="fromaccount" th:value="${sender.id}" />
 
                             <div class="mb-3">
                                 <label for="toaccount" class="form-label">Receiver Account</label>
                                 <select id="toaccount" name="toaccount" class="form-select" required onchange="handleReceiverChange()">
                                     <option value="" disabled selected>Choose account</option>
                                     <option th:each="toaccount : ${accounts}"
-                                            th:if="${toaccount.id != account.id}"
+                                            th:if="${toaccount.id != sender.id}"
                                             th:value="${toaccount.id}"
                                             th:attr="data-currency=${toaccount.currency}"
                                             th:text="${toaccount.id + ' - ' + toaccount.currency + ' (' + toaccount.client.name + ')'}">
@@ -39,7 +39,10 @@
 
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Transfer amount</label>
-                                <input type="number" step="0.01" min="0.01" th:max="${account.balance}" class="form-control" id="amount" name="amount" placeholder="Enter amount" required>
+                                <input type="number" step="0.01" min="0.01" th:max="${sender.balance}" class="form-control"
+                                       id="amount" name="amount"
+                                       placeholder="Enter amount"
+                                       required oninput="handleReceiverChange()">
                                 <div class="invalid-feedback">
                                     Please enter a valid amount.
                                 </div>
@@ -47,16 +50,20 @@
 
                             <!-- Convert if currencies are different -->
                             <div id="conversionBlock" class="mb-3 d-none">
-                                <label for="convertedAmount" class="form-label">Converted Amount (Receiver Currency)</label>
-                                <input type="text" class="form-control" id="convertedAmount" disabled>
-                                <div class="form-text text-warning">
-                                    Approximate amount after currency conversion (rate not applied here).
+                                <label for="convertedAmount" class="form-label">Converted Amount</label>
+                                <input type="hidden" id="isConversion" name="isConversion" value="false" />
+                                <input type="hidden" id="convertedAmount" name="convertedAmount" value="" />
+                                <input type="hidden" id="currentRate" name="currentRate" value="" />
+                                <input type="text" class="form-control" id="convertedAmountDisplay" disabled>
+                                <div id="receiverInfo" class="form-text">
+                                    Receiver currency: <span id="receiverCurrencyText"></span>,
+                                    Current rate: <span id="currentRateText"></span>
                                 </div>
                             </div>
 
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary rounded-3">Confirm Transfer</button>
-                                <a th:href="@{/transaction/account/{id}(id=${account.id})}" class="btn btn-secondary rounded-3">Back to Transactions List</a>
+                                <a th:href="@{/transaction/sender/{id}(id=${sender.id})}" class="btn btn-secondary rounded-3">Back to Transactions List</a>
                             </div>
                         </form>
 
@@ -86,15 +93,44 @@
         function handleReceiverChange() {
             const select = document.getElementById('toaccount');
             const selectedOption = select.options[select.selectedIndex];
+            if (!selectedOption) return;
+
             const receiverCurrency = selectedOption.getAttribute('data-currency');
-            const senderCurrency = /*[[${account.currency}]]*/ '';
+            const senderCurrency = /*[[${sender.currency}]]*/ '';
+            const exchangeRates = /*[[${exchangeRates}]]*/ {};
 
             const conversionBlock = document.getElementById('conversionBlock');
+            const isConversionInput = document.getElementById('isConversion');
+            const convertedAmountInput = document.getElementById('convertedAmount');
+            const convertedAmountDisplay = document.getElementById('convertedAmountDisplay');
+            const currentRateInput = document.getElementById('currentRate');
+            const receiverCurrencyText = document.getElementById('receiverCurrencyText');
+            const currentRateText = document.getElementById('currentRateText');
+            const amount = parseFloat(document.getElementById('amount').value);
+
 
             if (receiverCurrency && receiverCurrency !== senderCurrency) {
                 conversionBlock.classList.remove('d-none');
+                isConversionInput.value = "true";
+
+                const rate = exchangeRates[receiverCurrency] || 1;
+                currentRateInput.value = rate;
+
+                if (!isNaN(amount)) {
+                    const convertedAmount = (amount * rate).toFixed(2);
+                    convertedAmountInput.value = convertedAmount;
+                    convertedAmountDisplay.value = convertedAmount;
+                }
+
+                receiverCurrencyText.textContent = receiverCurrency;
+                currentRateText.textContent = `1 ${senderCurrency} = ${rate.toFixed(4)} ${receiverCurrency}`;
             } else {
                 conversionBlock.classList.add('d-none');
+                isConversionInput.value = "false";
+                convertedAmountInput.value = "";
+                convertedAmountDisplay.value = "";
+                receiverCurrencyText.textContent = "";
+                currentRateText.textContent = "";
             }
         }
     </script>
