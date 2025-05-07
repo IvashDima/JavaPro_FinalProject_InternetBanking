@@ -47,5 +47,15 @@ public class RateService {
             throw new RuntimeException("Manual rate refresh failed", e);
         }
     }
+
+    public ExchangeRate addDemoRate(ExchangeRate exchangeRate) {
+        try {
+            ExchangeRate newRate = exchangeRate;
+            System.out.println("Adding Demo rate SUCCESS");
+            return exchangeRateRepository.save(newRate);
+        } catch (Exception e) {
+            throw new RuntimeException("Adding Demo rate failed", e);
+        }
+    }
 }
 

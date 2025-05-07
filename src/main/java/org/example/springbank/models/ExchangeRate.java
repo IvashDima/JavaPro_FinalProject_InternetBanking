@@ -16,4 +16,9 @@ public class ExchangeRate extends BaseEntity{
 
     private double eurToUah;
     private double eurToUsd;
+
+    public ExchangeRate(double eurToUah, double eurToUsd) {
+        this.eurToUah = eurToUah;
+        this.eurToUsd = eurToUsd;
+    }
 }

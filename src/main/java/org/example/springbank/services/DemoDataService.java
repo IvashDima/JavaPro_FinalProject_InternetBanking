@@ -3,10 +3,7 @@ package org.example.springbank.services;
 import org.example.springbank.enums.CurrencyType;
 import org.example.springbank.enums.TransactionType;
 import org.example.springbank.enums.UserRole;
-import org.example.springbank.models.Account;
-import org.example.springbank.models.Client;
-import org.example.springbank.models.Loan;
-import org.example.springbank.models.Transaction;
+import org.example.springbank.models.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +17,16 @@ public class DemoDataService {
     private final LoanService loanService;
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final RateService rateService;
 
-    public DemoDataService(UserService userService, PasswordEncoder encoder, ClientService clientService, LoanService loanService, AccountService accountService, TransactionService transactionService) {
+    public DemoDataService(UserService userService, PasswordEncoder encoder, ClientService clientService, LoanService loanService, AccountService accountService, TransactionService transactionService, RateService rateService) {
         this.userService = userService;
         this.encoder = encoder;
         this.clientService = clientService;
         this.loanService = loanService;
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.rateService = rateService;
     }
 
     @Transactional
@@ -40,6 +39,9 @@ public class DemoDataService {
         Loan loan;
         Account account;
         Transaction transaction;
+
+        ExchangeRate exchangeRate = new ExchangeRate(47.015393, 1.134572);
+        rateService.addDemoRate(exchangeRate);
 
         for (int i = 1; i < 3; i++) {
             client = new Client("Name" + i, "Surname" + i, "12345678901" + i, "user" + i + "@test.com", "address"+i);
