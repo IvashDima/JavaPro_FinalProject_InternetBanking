@@ -33,17 +33,13 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final ClientService clientService;
-    private final RateRetriever rateRetriever;
     private final RateService rateService;
     private static final Logger logger = LoggerFactory.getLogger(RateRetriever.class);
 
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService, RateRetriever rateRetriever, RateService rateService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, RateService rateService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.clientService = clientService;
-        this.rateRetriever = rateRetriever;
         this.rateService = rateService;
     }
 
