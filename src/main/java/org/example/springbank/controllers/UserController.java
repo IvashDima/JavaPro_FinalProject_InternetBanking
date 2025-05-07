@@ -4,8 +4,10 @@ import org.example.springbank.enums.UserRole;
 import org.example.springbank.json.Rate;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.CustomUser;
+import org.example.springbank.models.ExchangeRate;
 import org.example.springbank.retrievers.RateRetriever;
 import org.example.springbank.services.ClientService;
+import org.example.springbank.services.RateService;
 import org.example.springbank.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,14 +35,16 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ClientService clientService;
     private final RateRetriever rateRetriever;
+    private final RateService rateService;
     private static final Logger logger = LoggerFactory.getLogger(RateRetriever.class);
 
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService, RateRetriever rateRetriever) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, ClientService clientService, RateRetriever rateRetriever, RateService rateService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.clientService = clientService;
         this.rateRetriever = rateRetriever;
+        this.rateService = rateService;
     }
 
     @GetMapping("/user/api")
@@ -58,14 +62,20 @@ public class UserController {
     @GetMapping("/")
     public String index(Model model) {
         resolveUserAndAddAttributes(model, true);
-        Rate rateData = null;
+        ExchangeRate rateData = null;
+
         try {
-//            rateData = rateRetriever.getRate(); // turn on to receive rate on load page
+            rateData = rateService.getTodayRate();
         } catch (Exception ex) {
-            logger.error("Error while retrieving rate", ex);
+            logger.error("Error while receiving rate", ex);
         }
         model.addAttribute("rateData", rateData);
         return "index";
+    }
+
+    @GetMapping("/test")
+    public String testPage() {
+        return "test";
     }
 
     @GetMapping("/user_profile")

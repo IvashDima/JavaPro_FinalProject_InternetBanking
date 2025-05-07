@@ -12,23 +12,22 @@
         <h1 class="mb-4">Welcome to your Internet Banking 🏦 </h1>
 
         <p class="lead">Rate on
-            <span id="dateDisplay" class="fw-bold" th:text="${rateData != null} ? ${rateData.date} : 'Not given'"></span>
+            <span id="dateDisplay" class="fw-bold" th:text="${rateData != null} ? ${#temporals.format(rateData.createdAt, 'd MMMM yyyy')} : 'Not given'"></span>
         </p>
         <h2 class="mb-3">EUR to UAH:
-            <span id="uahDisplay" th:text="${rateData != null} ? ${rateData.rates.uah} : 'Not given'"></span></h2>
+            <span id="uahDisplay" th:text="${rateData != null} ? ${rateData.eurToUah} : 'Not given'"></span></h2>
 
         <h2 class="mb-3">EUR to USD:
-            <span id="usdDisplay" th:text="${rateData != null} ? ${rateData.rates.usd} : 'Not given'"></span></h2>
-
-        <form class="d-grid gap-2 my-3">
-            <button id="loadRateButton" class="btn btn-primary">🚀 Get New Rate</button>
-        </form>
+            <span id="usdDisplay" th:text="${rateData != null} ? ${rateData.eurToUsd} : 'Not given'"></span></h2>
 
         <h3 class="mt-4 mb-3">
             Hi, <span th:text="${email}">User</span>! Please, choose option:
         </h3>
 
         <div class="d-grid gap-2" th:if="${admin}">
+            <form class="d-grid gap-2 my-3">
+                <button id="loadRateButton" class="btn btn-primary">🚀 Get New Rate</button>
+            </form>
             <a href="/admin" class="btn btn-warning">Go to User List</a>
             <a href="/client/" class="btn btn-warning">Go to Client List</a>
         </div>

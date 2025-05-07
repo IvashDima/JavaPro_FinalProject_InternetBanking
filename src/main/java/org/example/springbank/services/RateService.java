@@ -7,6 +7,7 @@ import org.example.springbank.retrievers.RateRetriever;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class RateService {
@@ -20,12 +21,12 @@ public class RateService {
 
     public ExchangeRate getTodayRate() {
         LocalDate today = LocalDate.now();
-        return exchangeRateRepository.findByDate(today)
+        return exchangeRateRepository.findTopByOrderByCreatedAtDesc()
+                .filter(rate -> rate.getCreatedAt().toLocalDate().equals(today))
                 .orElseGet(() -> {
                     try {
                         Rate externalRate = rateRetriever.getRate();
                         ExchangeRate newRate = new ExchangeRate();
-//                        newRate.setDate(today);
                         newRate.setEurToUah(externalRate.getRates().uah());
                         newRate.setEurToUsd(externalRate.getRates().usd());
                         return exchangeRateRepository.save(newRate);
@@ -39,7 +40,6 @@ public class RateService {
         try {
             Rate externalRate = rateRetriever.getRate();
             ExchangeRate newRate = new ExchangeRate();
-//            newRate.setDate(LocalDate.now());
             newRate.setEurToUah(externalRate.getRates().uah());
             newRate.setEurToUsd(externalRate.getRates().usd());
             return exchangeRateRepository.save(newRate);
