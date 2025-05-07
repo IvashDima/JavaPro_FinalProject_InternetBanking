@@ -59,7 +59,7 @@ public class DemoDataService {
             for (CurrencyType currencyType : CurrencyType.values()){
                 account = new Account(client, 0, currencyType);
                 accountService.addAccount(account);
-                transaction = new Transaction(account, account, 1000, TransactionType.DEPOSIT);
+                transaction = new Transaction(account, account, 1000, 1000, TransactionType.DEPOSIT);
                 transactionService.deposit(transaction);
             }
         }

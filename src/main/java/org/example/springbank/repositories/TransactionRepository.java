@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("SELECT c FROM Transaction c WHERE LOWER(c.amount) LIKE LOWER(CONCAT('%', :pattern, '%'))")
+    @Query("SELECT c FROM Transaction c WHERE LOWER(c.senderAmount) LIKE LOWER(CONCAT('%', :pattern, '%'))")
     List<Transaction> findByPattern(@Param("pattern") String pattern, Pageable pageable);
 
     @Query("SELECT c FROM Transaction c WHERE c.sender = :account OR c.receiver = :account")
@@ -31,7 +31,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT COUNT(c) FROM Transaction c WHERE c.receiver = :receiverAccount")
     long countByReceiverAccount(@Param("receiverAccount") Account receiverAccount);
 
-    @Query("SELECT NEW org.example.springbank.dto.TransactionToNotifyDTO(u.email, t.date, t.sender.client.name, t.receiver.client.name, t.amount)" +
+    @Query("SELECT NEW org.example.springbank.dto.TransactionToNotifyDTO(u.email, t.date, t.sender.client.name, t.receiver.client.name, t.senderAmount)" +
             "FROM CustomUser u, Transaction t WHERE t.date >= :from AND t.date < :to")
     List<TransactionToNotifyDTO> findTransactionToNotify(@Param("from") Date from,
                                               @Param("to") Date to);

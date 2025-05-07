@@ -27,22 +27,26 @@ public class Transaction extends BaseEntity{
     private Account receiver;
 
     @Column(nullable = false)
-    private double amount;
+    private double senderAmount;
+
+    @Column(nullable = false)
+    private double receiverAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType type;
 
-    public Transaction(Account senderAccount, Account receiverAccount, double amount, TransactionType type){
+    public Transaction(Account senderAccount, Account receiverAccount, double senderAmount, double receiverAmount, TransactionType type){
         this.date = new Date();
         this.sender = senderAccount;
         this.receiver = receiverAccount;
-        this.amount = amount;
+        this.senderAmount = senderAmount;
+        this.receiverAmount = receiverAmount;
         this.type = type;
     }
 
-    public void updateAmount(double amount) {
-        this.amount += amount;
+    public void updateSenderAmount(double senderAmount) {
+        this.senderAmount += senderAmount;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class Transaction extends BaseEntity{
                 // "id="+id+", " +
                 "senderAccount="+sender+", " +
                 "receiverAccount="+receiver+", " +
-                "amount="+amount+", " +
+                "senderAmount="+senderAmount+", " +
                 "type="+type+
                 "}";
     }
