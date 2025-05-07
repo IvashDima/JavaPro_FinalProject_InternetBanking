@@ -37,9 +37,10 @@
                 <tr>
                     <th scope="col"><input type="checkbox" /></th>
                     <th scope="col">Created</th>
-                    <th scope="col">From</th>
-                    <th scope="col">To</th>
-                    <th scope="col">Amount</th>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Receiver</th>
+                    <th scope="col">Sender Amount</th>
+                    <th scope="col">Receiver Amount</th>
                     <th scope="col">Type</th>
                 </tr>
                 </thead>
@@ -49,7 +50,8 @@
                     <td th:text="${#temporals.format(transaction.createdAt, 'd MMMM yyyy hh:mm')}"></td>
                     <td th:text="${transaction.sender != null ? transaction.sender : 'Default'}"></td>
                     <td th:text="${transaction.receiver != null ? transaction.receiver : 'Default'}"></td>
-                    <td th:text="${transaction.amount}"></td>
+                    <td th:text="${transaction.senderAmount}"></td>
+                    <td th:text="${transaction.receiverAmount}"></td>
                     <td th:text="${transaction.type}"></td>
                 </tr>
                 </tbody>
