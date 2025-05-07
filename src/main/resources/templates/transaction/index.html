@@ -36,7 +36,7 @@
                 <thead class="table-light">
                 <tr>
                     <th scope="col"><input type="checkbox" /></th>
-                    <th scope="col">ID</th>
+                    <th scope="col">Created</th>
                     <th scope="col">From</th>
                     <th scope="col">To</th>
                     <th scope="col">Amount</th>
@@ -44,9 +44,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="transaction : ${transactions}">
-                    <td><input type="checkbox" name="toDelete[]" th:value="${transaction.id}" /></td>
-                    <td th:text="${transaction.id}"></td>
+                <tr th:each="transaction : ${transactions}" th:with="locale=${#locale}">
+                    <td><input type="checkbox" name="toDelete[]" th:value="${transaction.id}" th:id="'checkbox_' + ${transaction.id}"/></td>
+                    <td th:text="${#temporals.format(transaction.createdAt, 'd MMMM yyyy hh:mm')}"></td>
                     <td th:text="${transaction.sender != null ? transaction.sender : 'Default'}"></td>
                     <td th:text="${transaction.receiver != null ? transaction.receiver : 'Default'}"></td>
                     <td th:text="${transaction.amount}"></td>

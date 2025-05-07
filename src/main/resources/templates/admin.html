@@ -29,13 +29,17 @@
                     <thead class="table-dark">
                     <tr>
                         <th>Select</th>
+                        <th>Id</th>
+                        <th>Created</th>
                         <th>Email</th>
                         <th>Role</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="user : ${users}">
+                    <tr th:each="user : ${users}" th:with="locale=${#locale}">
                         <td><input type="checkbox" name="toDelete[]" th:value="${user.id}" th:id="'checkbox_' + ${user.id}"/></td>
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${#temporals.format(user.createdAt, 'd MMMM yyyy hh:mm')}"></td>
                         <td th:text="${user.email}">email@example.com</td>
                         <td th:text="${user.role}">USER</td>
                     </tr>

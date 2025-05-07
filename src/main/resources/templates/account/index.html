@@ -49,8 +49,8 @@
         <table class="table table-hover align-middle">
             <thead class="table-light">
             <tr>
-                <th scope="col"></th>
-                <th scope="col">Id</th>
+                <th scope="col">Select</th>
+                <th scope="col">Created</th>
                 <th scope="col">Client</th>
                 <th scope="col">Balance</th>
                 <th scope="col">Currency</th>
@@ -59,15 +59,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="account : ${accounts}">
+            <tr th:each="account : ${accounts}" th:with="locale=${#locale}">
                 <td><input type="checkbox" name="toDelete[]" th:value="${account.id}" th:id="'checkbox_' + ${account.id}"/></td>
-                <td th:text="${account.id}"></td>
+                <td th:text="${#temporals.format(account.createdAt, 'd MMMM yyyy')}"></td>
                 <td th:text="${account.client != null ? account.client.name : 'Default'}"></td>
                 <td th:text="${account.balance}"></td>
                 <td th:text="${account.currency}"></td>
                 <td th:text="${account.client}"></td>
                 <td>
-                    <a th:href="@{/transaction/account/{id}(id=${account.id})}" class="btn btn-outline-primary btn-sm">View Transactions</a>
+                    <a th:href="@{/transaction/account/{id}(id=${account.id})}" class="btn btn-outline-primary btn-sm">Choose the account</a>
                 </td>
             </tr>
             </tbody>
