@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/transaction")
@@ -76,7 +78,7 @@ public class TransactionController {
     {
         Account account = (accountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(accountId) : null;
 
-        Transaction transaction = new Transaction(account, account, amount, TransactionType.DEPOSIT);
+        Transaction transaction = new Transaction(account, account, amount, amount, TransactionType.DEPOSIT);
         transactionService.deposit(transaction);
 
         return "redirect:/transaction/account/" + accountId;
@@ -85,20 +87,38 @@ public class TransactionController {
     @GetMapping("/transfer_page/{id}")
     public String transactionTransferPage(Model model,
                                          @PathVariable(value = "id") long accountId) {
-        model.addAttribute("accounts", transactionService.findAccounts());
-        model.addAttribute("account", transactionService.findAccount(accountId));
+        Account sender = transactionService.findAccount(accountId);
+        List<Account> accounts = transactionService.findAccounts();
+
+        model.addAttribute("sender", sender);
+        model.addAttribute("accounts", accounts);
+
+        Map<String, Double> exchangeRates = new HashMap<>();
+        for (Account acc : accounts) {
+            String receiverCurrency = acc.getCurrency().toString();
+            if (!receiverCurrency.equals(sender.getCurrency())) {
+                double rate = transactionService.getTodayRate(sender.getCurrency().toString(), receiverCurrency);
+                exchangeRates.put(receiverCurrency, rate);
+            }
+        }
+
+        model.addAttribute("exchangeRates", exchangeRates);
         return "transaction/transfer_page";
     }
 
     @PostMapping(value="/transfer")
     public String transactionTransfer(@RequestParam(value = "fromaccount") long fromAccountId,
                                       @RequestParam(value = "toaccount") long toAccountId,
-                                      @RequestParam double amount)
+                                      @RequestParam double amount,
+                                      @RequestParam(value = "isConversion", required = false) boolean isConversion,
+                                      @RequestParam(value = "convertedAmount", required = false) Double convertedAmount)
     {
         Account fromAccount = (fromAccountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(fromAccountId) : null;
         Account toAccount = (toAccountId != Constants.DEFAULT_ACCOUNT_ID) ? transactionService.findAccount(toAccountId) : null;
 
-        Transaction transaction = new Transaction(fromAccount, toAccount, amount, TransactionType.TRANSFER);
+        double finalAmount = (isConversion && convertedAmount != null) ? convertedAmount : amount;
+
+        Transaction transaction = new Transaction(fromAccount, toAccount, amount, finalAmount, TransactionType.TRANSFER);
         transactionService.transfer(transaction);
 
         return "redirect:/transaction/account/" + fromAccountId;
