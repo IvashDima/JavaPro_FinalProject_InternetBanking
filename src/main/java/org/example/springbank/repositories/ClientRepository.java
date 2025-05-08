@@ -18,8 +18,4 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Optional<Client> findByName(@Param("name") String name);
-
-//     List<Client> findByNameOrEmailOrderById(String name, String email);
-//     List<Client> findByNameAndEmail(String name, String email);
-
 }

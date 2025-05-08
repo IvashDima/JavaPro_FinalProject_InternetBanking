@@ -1,8 +1,6 @@
 package org.example.springbank.controllers;
 
-import org.example.springbank.json.Rate;
 import org.example.springbank.models.ExchangeRate;
-import org.example.springbank.retrievers.RateRetriever;
 import org.example.springbank.services.RateService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

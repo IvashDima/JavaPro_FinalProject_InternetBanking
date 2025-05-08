@@ -7,17 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<CustomUser, Long> {
-//    @Query("SELECT u FROM CustomUser u where u.login = :login")
-//    CustomUser findByLogin(@Param("login") String login);
-//
-//    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM CustomUser u WHERE u.login = :login")
-//    boolean existsByLogin(@Param("login") String login);
-
     @Query("SELECT u FROM CustomUser u WHERE u.email = :email")
     Optional<CustomUser> findByEmail(@Param("email") String email);
 

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -115,7 +114,7 @@ public class TransactionService {
 
     @Transactional(readOnly=true)
     public Account findAccount(long id) {
-        return accountRepository.findById(id)//.get();
+        return accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException(id));
     }
 

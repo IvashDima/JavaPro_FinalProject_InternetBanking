@@ -48,27 +48,19 @@ public class UserService{
     @Transactional
     public void deleteUsers(List<Long> ids) {
         ids.forEach(id -> {
-//            Optional<CustomUser> user = userRepository.findById(id);
             CustomUser user = userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException(id));
 
             if (!DemoDataService.ADMIN_LOGIN.equals(user.getEmail())) {
                 userRepository.deleteById(user.getId());
             }
-//            user.ifPresent(u -> {
-//                if ( ! DemoDataService.ADMIN_LOGIN.equals(u.getEmail())) {
-//                    userRepository.deleteById(u.getId());
-//                }
-//            });
         });
     }
 
     @Transactional
     public boolean addUser(String email, String passHash,
-                           UserRole role, Client client, //String name, String surname,
+                           UserRole role, Client client,
                            String name) {
-//        if (email == null || client == null || userRepository.existsByEmail(email))
-//            return false;
         if (email == null || client == null) {
             throw new IllegalArgumentException("Email or Client must not be null");
         }

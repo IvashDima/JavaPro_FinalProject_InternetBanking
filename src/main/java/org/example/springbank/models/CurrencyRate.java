@@ -13,10 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "CurrencyRates")
 public class CurrencyRate extends BaseEntity{
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "id")
-//    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,7 +29,6 @@ public class CurrencyRate extends BaseEntity{
     @Override
     public String toString(){
         return "CurrencyRate{" +
-//                "id="+id+", " +
                 "currency='"+currency+"', " +
                 "rate="+rate+
                 "}";

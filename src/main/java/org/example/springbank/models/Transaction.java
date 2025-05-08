@@ -52,7 +52,6 @@ public class Transaction extends BaseEntity{
     @Override
     public String toString(){
         return "Transaction{" +
-                // "id="+id+", " +
                 "senderAccount="+sender+", " +
                 "receiverAccount="+receiver+", " +
                 "senderAmount="+senderAmount+", " +

@@ -1,6 +1,5 @@
 package org.example.springbank.repositories;
 
-import org.example.springbank.models.Account;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.Loan;
 import org.springframework.data.domain.Pageable;

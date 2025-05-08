@@ -49,11 +49,7 @@ public class Account extends BaseEntity{
     @Override
     public String toString(){
         return "Account by " +
-//                "accountId="+id+", " +
                 "client '"+client.getName()+" "+client.getSurname()+"'"
-//              ", " +"balance="+balance+
-//              ", " +"currency="+currency+
-//                "}"
                 ;
     }
 }

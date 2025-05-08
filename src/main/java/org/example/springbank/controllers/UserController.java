@@ -1,12 +1,10 @@
 package org.example.springbank.controllers;
 
 import org.example.springbank.enums.UserRole;
-import org.example.springbank.json.Rate;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.CustomUser;
 import org.example.springbank.models.ExchangeRate;
 import org.example.springbank.retrievers.RateRetriever;
-import org.example.springbank.services.ClientService;
 import org.example.springbank.services.RateService;
 import org.example.springbank.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,11 +65,6 @@ public class UserController {
         }
         model.addAttribute("rateData", rateData);
         return "index";
-    }
-
-    @GetMapping("/test")
-    public String testPage() {
-        return "test";
     }
 
     @GetMapping("/user_profile")

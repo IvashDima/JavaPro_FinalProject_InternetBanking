@@ -2,10 +2,8 @@ package org.example.springbank.controllers;
 
 import org.example.springbank.constants.Constants;
 import org.example.springbank.enums.CurrencyType;
-import org.example.springbank.models.Account;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.Loan;
-import org.example.springbank.services.AccountService;
 import org.example.springbank.services.DemoDataService;
 import org.example.springbank.services.LoanService;
 import org.springframework.data.domain.PageRequest;

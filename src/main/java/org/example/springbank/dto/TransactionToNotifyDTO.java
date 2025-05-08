@@ -8,7 +8,6 @@ public class TransactionToNotifyDTO {
     private final String senderName;
     private final String receiverName;
     private final double amount;
-//    private final String type;
 
     public TransactionToNotifyDTO(String email, Date date, String senderName, String receiverName, double amount) {
         this.email = email;
@@ -16,7 +15,6 @@ public class TransactionToNotifyDTO {
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.amount = amount;
-//        this.type = type;
     }
 
     public String getEmail() {
@@ -38,8 +36,4 @@ public class TransactionToNotifyDTO {
     public double getAmount() {
         return amount;
     }
-
-//    public String getType() {
-//        return type;
-//    }
 }

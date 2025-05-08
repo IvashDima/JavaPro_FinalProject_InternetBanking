@@ -37,7 +37,7 @@ public class Client extends BaseEntity{
     private List<Loan> loan = new ArrayList<>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "client", fetch = FetchType.LAZY) //cascade = CascadeType.ALL, orphanRemoval = true
+    @OneToOne(mappedBy = "client", fetch = FetchType.LAZY)
     private CustomUser user;
 
     public Client(String name, String surname, String phone, String email, String address){
@@ -57,13 +57,6 @@ public class Client extends BaseEntity{
 
     @Override
     public String toString(){
-        return name + " " + surname
-//                "Client{" +
-//                "id="+id+", " +
-//                "name='"+name+
-//                ", " +"surname='"+surname+
-//              ", " +"phone='"+phone+
-//              ", " +"email='"+email+"'" +
-                ;
+        return name + " " + surname;
     }
 }

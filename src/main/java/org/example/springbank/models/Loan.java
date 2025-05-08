@@ -42,7 +42,6 @@ public class Loan extends BaseEntity{
     @Override
     public String toString(){
         return "Loan{" +
-//                "loanId="+id+", " +
                 "client='"+client.getName()+" "+client.getSurname()+"'"+
               ", " +"balance="+balance+
               ", " +"currency="+currency+
