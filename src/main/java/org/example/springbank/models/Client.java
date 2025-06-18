@@ -21,7 +21,6 @@ public class Client extends BaseEntity{
     private String name;
     private String surname;
 
-    @NotBlank
     @Pattern(regexp="\\+?\\d{12,13}", message="Phone: 12–13 numbers, can be +")
     private String phone;
 
