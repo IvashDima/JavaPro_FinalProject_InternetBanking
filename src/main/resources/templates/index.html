@@ -21,7 +21,9 @@
             <span id="usdDisplay" th:text="${rateData != null} ? ${rateData.eurToUsd} : 'Not given'"></span></h2>
 
         <h3 class="mt-4 mb-3">
-            Hi, <span th:text="${email}">User</span>! Please, choose option:
+            Hi,
+            <span th:text="${#strings.isEmpty(name) ? (email != null ? email : 'User') : name}">User</span>!
+            Please, choose option:
         </h3>
 
         <div class="d-grid gap-2" th:if="${admin}">
