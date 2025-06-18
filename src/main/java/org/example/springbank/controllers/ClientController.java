@@ -48,7 +48,7 @@ public class ClientController {
 
         model.addAttribute("clients", clients);
         model.addAttribute("allPages", getPageCount());
-        return "/client/index";
+        return "client/index";
     }
 
     @GetMapping("/client_add_page")
