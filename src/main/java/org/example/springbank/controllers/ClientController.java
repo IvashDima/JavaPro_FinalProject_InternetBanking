@@ -22,7 +22,7 @@ public class ClientController {
     private final ClientService clientService;
     private final DemoDataService demoDataService;
 
-    public ClientController(ClientService clientService, DemoDataService demoDataService){
+    public ClientController(ClientService clientService, DemoDataService demoDataService) {
         this.clientService = clientService;
         this.demoDataService = demoDataService;
     }
@@ -40,11 +40,13 @@ public class ClientController {
     }
 
     @GetMapping("/")
-    public String index(Model model,
-                        @RequestParam(required = false, defaultValue = "0") Integer page){
-        if(page < 0) page = 0;
+    public String index(
+            Model model, @RequestParam(required = false, defaultValue = "0") Integer page) {
+        if (page < 0) page = 0;
 
-        List<Client> clients = clientService.findAll(PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
+        List<Client> clients =
+                clientService.findAll(
+                        PageRequest.of(page, Constants.ITEMS_PER_PAGE, Sort.Direction.DESC, "id"));
 
         model.addAttribute("clients", clients);
         model.addAttribute("allPages", getPageCount());
@@ -56,13 +58,13 @@ public class ClientController {
         return "client/client_add_page";
     }
 
-    @PostMapping(value="/add")
-    public String clientAdd(@RequestParam String name,
-                            @RequestParam String surname,
-                            @RequestParam String phone,
-                            @RequestParam String email,
-                            @RequestParam String address)
-    {
+    @PostMapping(value = "/add")
+    public String clientAdd(
+            @RequestParam String name,
+            @RequestParam String surname,
+            @RequestParam String phone,
+            @RequestParam String email,
+            @RequestParam String address) {
         Client client = new Client(name, surname, phone, email, address);
         clientService.addClient(client);
 
@@ -78,8 +80,7 @@ public class ClientController {
     @PostMapping(value = "/delete")
     public ResponseEntity<Void> delete(
             @RequestParam(value = "toDelete[]", required = false) long[] toDelete) {
-        if (toDelete != null && toDelete.length > 0)
-            clientService.deleteClient(toDelete);
+        if (toDelete != null && toDelete.length > 0) clientService.deleteClient(toDelete);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -93,6 +94,7 @@ public class ClientController {
 
     private long getPageCount() {
         long totalCount = clientService.count();
-        return (totalCount / Constants.ITEMS_PER_PAGE) + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
+        return (totalCount / Constants.ITEMS_PER_PAGE)
+                + ((totalCount % Constants.ITEMS_PER_PAGE > 0) ? 1 : 0);
     }
 }

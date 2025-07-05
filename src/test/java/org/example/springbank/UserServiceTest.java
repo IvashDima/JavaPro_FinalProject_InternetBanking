@@ -1,5 +1,9 @@
 package org.example.springbank;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import org.example.springbank.enums.UserRegisterType;
 import org.example.springbank.enums.UserRole;
 import org.example.springbank.models.Client;
@@ -20,22 +24,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-    @Mock
-    private PasswordEncoder encoder;
-    @Mock
-    private ClientRepository clientMockRepository;
-    @Mock
-    private UserRepository userMockRepository;
-    @InjectMocks
-    private ClientService clientMockService;
-    @InjectMocks
-    private UserService userMockService;
+    @Mock private PasswordEncoder encoder;
+    @Mock private ClientRepository clientMockRepository;
+    @Mock private UserRepository userMockRepository;
+    @InjectMocks private ClientService clientMockService;
+    @InjectMocks private UserService userMockService;
     private Client client1, client2;
     private CustomUser customUser1, customUser2;
 
@@ -44,8 +39,22 @@ public class UserServiceTest {
         client1 = new Client("Dima", "Berg", "1234567", "dima@test.com", "addressFamily");
         client2 = new Client("Iryna", "Berg", "1234568", "iryna@test.com", "addressFamily");
 
-        customUser1 = new CustomUser("dima@test.com", "Dima", encoder.encode("password"), UserRole.USER, UserRegisterType.FORM, client1);
-        customUser2 = new CustomUser("iryna@test.com", "Iryna", encoder.encode("password"), UserRole.USER, UserRegisterType.FORM, client2);
+        customUser1 =
+                new CustomUser(
+                        "dima@test.com",
+                        "Dima",
+                        encoder.encode("password"),
+                        UserRole.USER,
+                        UserRegisterType.FORM,
+                        client1);
+        customUser2 =
+                new CustomUser(
+                        "iryna@test.com",
+                        "Iryna",
+                        encoder.encode("password"),
+                        UserRole.USER,
+                        UserRegisterType.FORM,
+                        client2);
     }
 
     @Test

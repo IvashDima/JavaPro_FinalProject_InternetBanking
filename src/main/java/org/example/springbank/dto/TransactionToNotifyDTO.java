@@ -9,7 +9,8 @@ public class TransactionToNotifyDTO {
     private final String receiverName;
     private final double amount;
 
-    public TransactionToNotifyDTO(String email, Date date, String senderName, String receiverName, double amount) {
+    public TransactionToNotifyDTO(
+            String email, Date date, String senderName, String receiverName, double amount) {
         this.email = email;
         this.date = date;
         this.senderName = senderName;

@@ -3,6 +3,7 @@ package org.example.springbank.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.example.springbank.enums.CurrencyType;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Table(name = "Loans")
-public class Loan extends BaseEntity{
+public class Loan extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -25,7 +26,7 @@ public class Loan extends BaseEntity{
     @Column(nullable = false)
     private CurrencyType currency;
 
-    public Loan(Client client, double balance, CurrencyType currency){
+    public Loan(Client client, double balance, CurrencyType currency) {
         this.client = client;
         this.balance = balance;
         this.currency = currency;
@@ -40,12 +41,19 @@ public class Loan extends BaseEntity{
     }
 
     @Override
-    public String toString(){
-        return "Loan{" +
-                "client='"+client.getName()+" "+client.getSurname()+"'"+
-              ", " +"balance="+balance+
-              ", " +"currency="+currency+
-                "}";
+    public String toString() {
+        return "Loan{"
+                + "client='"
+                + client.getName()
+                + " "
+                + client.getSurname()
+                + "'"
+                + ", "
+                + "balance="
+                + balance
+                + ", "
+                + "currency="
+                + currency
+                + "}";
     }
-
 }

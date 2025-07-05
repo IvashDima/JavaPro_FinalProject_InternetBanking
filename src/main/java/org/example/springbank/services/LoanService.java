@@ -18,38 +18,39 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final ClientRepository clientRepository;
 
-
     public LoanService(LoanRepository loanRepository, ClientRepository clientRepository) {
         this.loanRepository = loanRepository;
         this.clientRepository = clientRepository;
     }
 
-
     @Transactional
-    public void addLoan(Loan loan){loanRepository.save(loan);}
+    public void addLoan(Loan loan) {
+        loanRepository.save(loan);
+    }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Client> findClients() {
         return clientRepository.findAll();
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Loan> findAll(Pageable pageable) {
         return loanRepository.findAll(pageable).getContent();
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Loan findById(long id) {
-        return loanRepository.findById(id)
+        return loanRepository
+                .findById(id)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with id: " + id));
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Loan> findByClient(Client client, Pageable pageable) {
         return loanRepository.findByClient(client, pageable);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Loan> findByPattern(String pattern, Pageable pageable) {
         return loanRepository.findByPattern(pattern, pageable);
     }
@@ -64,14 +65,12 @@ public class LoanService {
         return loanRepository.count();
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Client findClient(long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+        return clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
     }
 
     public void deleteAllLoans() {
         loanRepository.deleteAll();
     }
-
 }

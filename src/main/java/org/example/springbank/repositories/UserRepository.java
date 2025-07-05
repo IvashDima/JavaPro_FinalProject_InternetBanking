@@ -14,9 +14,11 @@ public interface UserRepository extends JpaRepository<CustomUser, Long> {
     @Query("SELECT u FROM CustomUser u WHERE u.email = :email")
     Optional<CustomUser> findByEmail(@Param("email") String email);
 
-    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM CustomUser u WHERE u.role = :role")
+    @Query(
+            "SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM CustomUser u WHERE u.role = :role")
     boolean existsByRole(@Param("role") UserRole role);
 
-    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM CustomUser u WHERE u.email = :email")
+    @Query(
+            "SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM CustomUser u WHERE u.email = :email")
     boolean existsByEmail(@Param("email") String email);
 }

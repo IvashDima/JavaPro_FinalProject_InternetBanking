@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @Table(name = "ExchangeRates")
-public class ExchangeRate extends BaseEntity{
+public class ExchangeRate extends BaseEntity {
 
     private double eurToUah;
     private double eurToUsd;

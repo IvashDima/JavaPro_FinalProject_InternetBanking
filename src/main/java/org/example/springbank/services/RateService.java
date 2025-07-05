@@ -20,19 +20,21 @@ public class RateService {
 
     public ExchangeRate getTodayRate() {
         LocalDate today = LocalDate.now();
-        return exchangeRateRepository.findTopByOrderByCreatedAtDesc()
+        return exchangeRateRepository
+                .findTopByOrderByCreatedAtDesc()
                 .filter(rate -> rate.getCreatedAt().toLocalDate().equals(today))
-                .orElseGet(() -> {
-                    try {
-                        Rate externalRate = rateRetriever.getRate();
-                        ExchangeRate newRate = new ExchangeRate();
-                        newRate.setEurToUah(externalRate.getRates().uah());
-                        newRate.setEurToUsd(externalRate.getRates().usd());
-                        return exchangeRateRepository.save(newRate);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to fetch external rate", e);
-                    }
-                });
+                .orElseGet(
+                        () -> {
+                            try {
+                                Rate externalRate = rateRetriever.getRate();
+                                ExchangeRate newRate = new ExchangeRate();
+                                newRate.setEurToUah(externalRate.getRates().uah());
+                                newRate.setEurToUsd(externalRate.getRates().usd());
+                                return exchangeRateRepository.save(newRate);
+                            } catch (Exception e) {
+                                throw new RuntimeException("Failed to fetch external rate", e);
+                            }
+                        });
     }
 
     public ExchangeRate forceRefreshRate() {
@@ -57,4 +59,3 @@ public class RateService {
         }
     }
 }
-

@@ -47,4 +47,3 @@ public class GlobalViewExceptionHandler {
         return "error/custom_error";
     }
 }
-
