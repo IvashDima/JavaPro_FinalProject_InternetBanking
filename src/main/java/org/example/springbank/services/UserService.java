@@ -1,9 +1,9 @@
 package org.example.springbank.services;
 
-import org.example.springbank.exceptions.UserNotFoundException;
 import org.example.springbank.dto.CustomUserDTO;
 import org.example.springbank.enums.UserRegisterType;
 import org.example.springbank.enums.UserRole;
+import org.example.springbank.exceptions.UserNotFoundException;
 import org.example.springbank.models.Client;
 import org.example.springbank.models.CustomUser;
 import org.example.springbank.repositories.ClientRepository;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserService{
+public class UserService {
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
 
@@ -41,26 +41,29 @@ public class UserService{
     @Transactional(readOnly = true)
     public CustomUser getByEmail(String email) {
         System.out.println("Run getByEmail: " + email);
-        return userRepository.findByEmail(email)
+        return userRepository
+                .findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Transactional
     public void deleteUsers(List<Long> ids) {
-        ids.forEach(id -> {
-            CustomUser user = userRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(id));
+        ids.forEach(
+                id -> {
+                    CustomUser user =
+                            userRepository
+                                    .findById(id)
+                                    .orElseThrow(() -> new UserNotFoundException(id));
 
-            if (!DemoDataService.ADMIN_LOGIN.equals(user.getEmail())) {
-                userRepository.deleteById(user.getId());
-            }
-        });
+                    if (!DemoDataService.ADMIN_LOGIN.equals(user.getEmail())) {
+                        userRepository.deleteById(user.getId());
+                    }
+                });
     }
 
     @Transactional
-    public boolean addUser(String email, String passHash,
-                           UserRole role, Client client,
-                           String name) {
+    public boolean addUser(
+            String email, String passHash, UserRole role, Client client, String name) {
         if (email == null || client == null) {
             throw new IllegalArgumentException("Email or Client must not be null");
         }
@@ -71,16 +74,19 @@ public class UserService{
 
         clientRepository.save(client);
 
-        System.out.println("CLIENT IN USER CREATION (addUser)!!! "+client);
-        CustomUser user = CustomUser.create(email, name, passHash, role, UserRegisterType.FORM, client);
+        System.out.println("CLIENT IN USER CREATION (addUser)!!! " + client);
+        CustomUser user =
+                CustomUser.create(email, name, passHash, role, UserRegisterType.FORM, client);
         userRepository.save(user);
         return true;
     }
 
     @Transactional
     public void updateUser(String email, String name) {
-        CustomUser user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
+        CustomUser user =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new UserNotFoundException(email));
 
         user.setEmail(email);
         user.setName(name);
@@ -89,8 +95,7 @@ public class UserService{
 
     @Transactional
     public void addGoogleUser(CustomUserDTO userDTO) {
-        if (userRepository.existsByEmail(userDTO.getEmail()))
-            return;
+        if (userRepository.existsByEmail(userDTO.getEmail())) return;
 
         Client client = new Client();
         client.setName(userDTO.getName());
@@ -98,12 +103,18 @@ public class UserService{
 
         clientRepository.save(client);
 
-        System.out.println("CLIENT from GOOGLE CREATION!!! "+client);
+        System.out.println("CLIENT from GOOGLE CREATION!!! " + client);
 
-        CustomUser user = CustomUser.of(userDTO.getEmail(), userDTO.getName(),
-                UserRole.USER, UserRegisterType.GOOGLE, client,  userDTO.getPictureUrl());
+        CustomUser user =
+                CustomUser.of(
+                        userDTO.getEmail(),
+                        userDTO.getName(),
+                        UserRole.USER,
+                        UserRegisterType.GOOGLE,
+                        client,
+                        userDTO.getPictureUrl());
         user.setClient(client);
-        System.out.println("USER from GOOGLE CREATION!!! "+user);
+        System.out.println("USER from GOOGLE CREATION!!! " + user);
 
         client.setUser(user);
 

@@ -19,7 +19,14 @@ public class DemoDataService {
     private final TransactionService transactionService;
     private final RateService rateService;
 
-    public DemoDataService(UserService userService, PasswordEncoder encoder, ClientService clientService, LoanService loanService, AccountService accountService, TransactionService transactionService, RateService rateService) {
+    public DemoDataService(
+            UserService userService,
+            PasswordEncoder encoder,
+            ClientService clientService,
+            LoanService loanService,
+            AccountService accountService,
+            TransactionService transactionService,
+            RateService rateService) {
         this.userService = userService;
         this.encoder = encoder;
         this.clientService = clientService;
@@ -33,7 +40,7 @@ public class DemoDataService {
     public void generateDemoData() {
         transactionService.deleteAllTransactions();
         accountService.deleteAllAccounts();
-//        clientService.deleteAllClients();
+        //        clientService.deleteAllClients();
 
         Client client;
         Loan loan;
@@ -44,22 +51,32 @@ public class DemoDataService {
         rateService.addDemoRate(exchangeRate);
 
         for (int i = 1; i < 3; i++) {
-            client = new Client("Name" + i, "Surname" + i, "12345678901" + i, "user" + i + "@test.com", "address"+i);
+            client =
+                    new Client(
+                            "Name" + i,
+                            "Surname" + i,
+                            "12345678901" + i,
+                            "user" + i + "@test.com",
+                            "address" + i);
             clientService.addClient(client);
 
-            userService.addUser("user" + i + "@test.com",
+            userService.addUser(
+                    "user" + i + "@test.com",
                     encoder.encode("password"),
-                    UserRole.USER, client,"Name" + i);
+                    UserRole.USER,
+                    client,
+                    "Name" + i);
 
-            for (CurrencyType currencyType : CurrencyType.values()){
+            for (CurrencyType currencyType : CurrencyType.values()) {
                 loan = new Loan(client, 10000, currencyType);
                 loanService.addLoan(loan);
             }
 
-            for (CurrencyType currencyType : CurrencyType.values()){
+            for (CurrencyType currencyType : CurrencyType.values()) {
                 account = new Account(client, 0, currencyType);
                 accountService.addAccount(account);
-                transaction = new Transaction(account, account, 1000, 1000, TransactionType.DEPOSIT);
+                transaction =
+                        new Transaction(account, account, 1000, 1000, TransactionType.DEPOSIT);
                 transactionService.deposit(transaction);
             }
         }
@@ -67,12 +84,21 @@ public class DemoDataService {
 
     public void createAdminIfNotExists() {
         if (!userService.adminExists()) {
-            Client clientadmin = new Client(ADMIN_LOGIN, ADMIN_LOGIN, "123456789012", ADMIN_LOGIN + "@test.com", "address");
-            System.out.println("Create admin in DemoData: "+clientadmin);
+            Client clientadmin =
+                    new Client(
+                            ADMIN_LOGIN,
+                            ADMIN_LOGIN,
+                            "123456789012",
+                            ADMIN_LOGIN + "@test.com",
+                            "address");
+            System.out.println("Create admin in DemoData: " + clientadmin);
             clientService.addClient(clientadmin);
-            userService.addUser(ADMIN_LOGIN + "@test.com",
+            userService.addUser(
+                    ADMIN_LOGIN + "@test.com",
                     encoder.encode("password"),
-                    UserRole.ADMIN, clientadmin, ADMIN_LOGIN);
+                    UserRole.ADMIN,
+                    clientadmin,
+                    ADMIN_LOGIN);
         }
     }
 }

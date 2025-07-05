@@ -1,5 +1,9 @@
 package org.example.springbank;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import org.example.springbank.models.Client;
 import org.example.springbank.repositories.ClientRepository;
 import org.example.springbank.services.ClientService;
@@ -14,18 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {
 
-    @Mock
-    private ClientRepository clientMockRepository;
+    @Mock private ClientRepository clientMockRepository;
 
-    @InjectMocks
-    private ClientService clientMockService;
+    @InjectMocks private ClientService clientMockService;
 
     private Client client1, client2;
 

@@ -20,13 +20,13 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
 
-    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository){
+    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
     }
 
     @Transactional
-    public void addAccount(Account account){
+    public void addAccount(Account account) {
         try {
             accountRepository.save(account);
         } catch (Exception e) {
@@ -34,7 +34,7 @@ public class AccountService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Client> findClients() {
         try {
             return clientRepository.findAll();
@@ -43,7 +43,7 @@ public class AccountService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Account> findAll(Pageable pageable) {
         try {
             return accountRepository.findAll(pageable).getContent();
@@ -52,13 +52,12 @@ public class AccountService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Account findById(long id) {
-        return accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundException(id));
+        return accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Account> findByClient(Client client, Pageable pageable) {
         try {
             return accountRepository.findByClient(client, pageable);
@@ -67,7 +66,7 @@ public class AccountService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Account> findByPattern(String pattern, Pageable pageable) {
         try {
             return accountRepository.findByPattern(pattern, pageable);
@@ -94,10 +93,9 @@ public class AccountService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Client findClient(long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+        return clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
     }
 
     public void deleteAllAccounts() {

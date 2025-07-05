@@ -21,7 +21,8 @@ public class EmailScheduler {
 
     @Scheduled(fixedDelay = 60000)
     public void sendNotifications() {
-        List<TransactionToNotifyDTO> transactions = transactionService.getTransactionToNotify(new Date());
+        List<TransactionToNotifyDTO> transactions =
+                transactionService.getTransactionToNotify(new Date());
         transactions.forEach((transaction) -> emailService.sendMessage(transaction));
     }
 }

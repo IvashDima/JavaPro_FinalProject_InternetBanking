@@ -5,4 +5,3 @@ public class AccountProcessingException extends RuntimeException {
         super(message, cause);
     }
 }
-

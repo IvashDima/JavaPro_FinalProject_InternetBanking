@@ -14,12 +14,15 @@ public class CustomUserDTO {
     public static CustomUserDTO of(String email, String name, String pictureUrl) {
         return new CustomUserDTO(email, name, pictureUrl);
     }
+
     public String getEmail() {
         return email;
     }
+
     public String getName() {
         return name;
     }
+
     public String getPictureUrl() {
         return pictureUrl;
     }

@@ -15,8 +15,7 @@ import java.util.List;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private final UserService userService;
+    @Autowired private final UserService userService;
 
     public UserDetailsServiceImpl(UserService userService) {
         this.userService = userService;
@@ -26,9 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         CustomUser customUser = userService.getByEmail(email);
 
-        List<GrantedAuthority> roles = Arrays.asList(
-                new SimpleGrantedAuthority(customUser.getRole().toString())
-        );
+        List<GrantedAuthority> roles =
+                Arrays.asList(new SimpleGrantedAuthority(customUser.getRole().toString()));
 
         return new User(customUser.getEmail(), customUser.getPassword(), roles);
     }

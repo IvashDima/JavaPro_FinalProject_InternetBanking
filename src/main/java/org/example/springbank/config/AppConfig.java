@@ -26,7 +26,8 @@ public class AppConfig extends GlobalMethodSecurityConfiguration implements WebM
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setSubject("Transaction notification");
-        message.setText("Transaction completed successfully:\n\n [%s] Sender: %s, Receiver: %s, Amount: %s");
+        message.setText(
+                "Transaction completed successfully:\n\n [%s] Sender: %s, Receiver: %s, Amount: %s");
         message.setFrom(fromAddress);
 
         return message;
@@ -34,10 +35,9 @@ public class AppConfig extends GlobalMethodSecurityConfiguration implements WebM
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/static/**")
-                .addResourceLocations("/WEB-INF/static/");
+        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");
     }
+
     @Profile("local")
     @Bean
     public CommandLineRunner demo(final DemoDataService demoDataService) {

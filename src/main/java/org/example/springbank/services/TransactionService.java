@@ -25,14 +25,17 @@ public class TransactionService {
     private final AccountRepository accountRepository;
     private final ExchangeRateRepository exchangeRateRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, ExchangeRateRepository exchangeRateRepository){
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            AccountRepository accountRepository,
+            ExchangeRateRepository exchangeRateRepository) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.exchangeRateRepository = exchangeRateRepository;
     }
 
     @Transactional
-    public void addTransaction(Transaction transaction){
+    public void addTransaction(Transaction transaction) {
         try {
             transactionRepository.save(transaction);
         } catch (Exception e) {
@@ -41,7 +44,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public void deposit(Transaction transaction){
+    public void deposit(Transaction transaction) {
         try {
             transactionRepository.save(transaction);
 
@@ -53,12 +56,13 @@ public class TransactionService {
     }
 
     @Transactional
-    public void transfer(Transaction transaction){
+    public void transfer(Transaction transaction) {
         try {
             transactionRepository.save(transaction);
-                if (transaction.getSender().getBalance() < transaction.getSenderAmount()) {
-                    throw new InsufficientFundsException("Sender does not have enough funds for this transfer");
-                }
+            if (transaction.getSender().getBalance() < transaction.getSenderAmount()) {
+                throw new InsufficientFundsException(
+                        "Sender does not have enough funds for this transfer");
+            }
             transaction.getSender().withdraw(transaction.getSenderAmount());
             accountRepository.save(transaction.getReceiver());
 
@@ -77,8 +81,13 @@ public class TransactionService {
             return 1.0;
         }
 
-        ExchangeRate rate = exchangeRateRepository.findTopByOrderByCreatedAtDesc()
-                .orElseThrow(() -> new DataAccessException("No exchange rate data available", null));
+        ExchangeRate rate =
+                exchangeRateRepository
+                        .findTopByOrderByCreatedAtDesc()
+                        .orElseThrow(
+                                () ->
+                                        new DataAccessException(
+                                                "No exchange rate data available", null));
         try {
             double eurToUah = rate.getEurToUah();
             double eurToUsd = rate.getEurToUsd();
@@ -97,13 +106,19 @@ public class TransactionService {
                     if ("UAH".equals(toCurrency)) return (1.0 / eurToUsd) * eurToUah;
                     break;
             }
-            throw new DataAccessException("Unsupported currency pair: " + fromCurrency + " → " + toCurrency, null);
+            throw new DataAccessException(
+                    "Unsupported currency pair: " + fromCurrency + " → " + toCurrency, null);
         } catch (Exception e) {
-            throw new DataAccessException("Error while calculating exchange rate for " + fromCurrency + " → " + toCurrency, e);
+            throw new DataAccessException(
+                    "Error while calculating exchange rate for "
+                            + fromCurrency
+                            + " → "
+                            + toCurrency,
+                    e);
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Account> findAccounts() {
         try {
             return accountRepository.findAll();
@@ -112,13 +127,12 @@ public class TransactionService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Account findAccount(long id) {
-        return accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundException(id));
+        return accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Transaction> findAll(Pageable pageable) {
         try {
             return transactionRepository.findAll(pageable).getContent();
@@ -127,22 +141,22 @@ public class TransactionService {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Transaction> findByPattern(String pattern, Pageable pageable) {
         return transactionRepository.findByPattern(pattern, pageable);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Transaction> findByAnyAccount(Account account, Pageable pageable) {
         return transactionRepository.findByAnyAccount(account, pageable);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Transaction> findBySenderAccount(Account account, Pageable pageable) {
         return transactionRepository.findBySenderAccount(account, pageable);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<Transaction> findByReceiverAccount(Account account, Pageable pageable) {
         return transactionRepository.findByReceiverAccount(account, pageable);
     }

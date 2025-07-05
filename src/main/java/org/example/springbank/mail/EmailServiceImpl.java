@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;
     private final ApplicationContext applicationContext;
@@ -20,8 +20,13 @@ public class EmailServiceImpl implements EmailService{
     public void sendMessage(TransactionToNotifyDTO transaction) {
         SimpleMailMessage message = applicationContext.getBean(SimpleMailMessage.class);
 
-        String text = String.format(message.getText(), transaction.getDate(), transaction.getSenderName(),
-                transaction.getReceiverName(), transaction.getAmount()); //, transaction.getType());
+        String text =
+                String.format(
+                        message.getText(),
+                        transaction.getDate(),
+                        transaction.getSenderName(),
+                        transaction.getReceiverName(),
+                        transaction.getAmount()); // , transaction.getType());
 
         message.setText(text);
         message.setTo(transaction.getEmail());

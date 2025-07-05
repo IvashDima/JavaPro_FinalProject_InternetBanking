@@ -9,10 +9,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthHandler implements AuthenticationSuccessHandler {
@@ -24,9 +25,11 @@ public class AuthHandler implements AuthenticationSuccessHandler {
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
-                                        HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            Authentication authentication)
+            throws IOException {
         System.out.println("OAuth2 authentication successful!!!");
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -45,11 +48,11 @@ public class AuthHandler implements AuthenticationSuccessHandler {
 
         if (user == null) {
             System.out.println("User not found, creating new Google user");
-            CustomUserDTO userDTO = CustomUserDTO.of(
-                    email,
-                    (String) attributes.get("name"),
-                    (String) attributes.get("picture")
-            );
+            CustomUserDTO userDTO =
+                    CustomUserDTO.of(
+                            email,
+                            (String) attributes.get("name"),
+                            (String) attributes.get("picture"));
 
             userService.addGoogleUser(userDTO);
             httpServletResponse.sendRedirect("/");

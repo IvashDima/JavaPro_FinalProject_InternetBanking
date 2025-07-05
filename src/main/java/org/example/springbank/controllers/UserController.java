@@ -7,6 +7,8 @@ import org.example.springbank.models.ExchangeRate;
 import org.example.springbank.retrievers.RateRetriever;
 import org.example.springbank.services.RateService;
 import org.example.springbank.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,13 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -34,8 +35,8 @@ public class UserController {
     private final RateService rateService;
     private static final Logger logger = LoggerFactory.getLogger(RateRetriever.class);
 
-
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, RateService rateService) {
+    public UserController(
+            UserService userService, PasswordEncoder passwordEncoder, RateService rateService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.rateService = rateService;
@@ -74,9 +75,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/update")
-    public String update(@RequestParam(required = false) String name,
-                         @RequestParam(required = false) String phone,
-                         @RequestParam(required = false) String address) {
+    public String update(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String address) {
         CustomUser customUser = getCurrentCustomUser();
         String email = customUser.getEmail();
         customUser.getClient().setPhone(phone);
@@ -92,19 +94,19 @@ public class UserController {
     }
 
     @PostMapping(value = "/newuser")
-    public String add(@RequestParam String email,
-                         @RequestParam String password,
-                         @RequestParam String name,
-                         @RequestParam String surname,
-                         @RequestParam(required = false) String phone,
-                         @RequestParam(required = false) String address,
-                         @ModelAttribute @Valid CustomUser form,
-                         BindingResult binding,
-                         Model model) {
+    public String add(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String name,
+            @RequestParam String surname,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String address,
+            @ModelAttribute @Valid CustomUser form,
+            BindingResult binding,
+            Model model) {
         String passHash = passwordEncoder.encode(password);
 
-        if (password.length() < 8)
-            return "error";
+        if (password.length() < 8) return "error";
 
         Client client = new Client();
         client.setName(name);
@@ -113,7 +115,7 @@ public class UserController {
         client.setPhone(phone);
         client.setAddress(address);
 
-        if ( ! userService.addUser(email, passHash, UserRole.USER, client, name)) {
+        if (!userService.addUser(email, passHash, UserRole.USER, client, name)) {
             model.addAttribute("exists", true);
             model.addAttribute("email", email);
             return "register";
@@ -127,8 +129,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/delete")
-    public String delete(@RequestParam(name = "toDelete[]", required = false) List<Long> ids,
-                         Model model) {
+    public String delete(
+            @RequestParam(name = "toDelete[]", required = false) List<Long> ids, Model model) {
         userService.deleteUsers(ids);
         model.addAttribute("users", userService.getAllUsers());
 
@@ -146,7 +148,6 @@ public class UserController {
         model.addAttribute("users", userService.getAllUsers());
         return "admin";
     }
-
 
     @GetMapping("/error/403")
     public String unauthorized(Model model) {
@@ -169,11 +170,13 @@ public class UserController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Object principal = authentication.getPrincipal();
 
-            Collection<? extends GrantedAuthority> roles = (principal instanceof DefaultOidcUser)
-                    ? ((DefaultOidcUser) principal).getAuthorities().stream()
-                    .filter(a -> a.getAuthority().startsWith("ROLE_"))
-                    .collect(Collectors.toList())
-                    : ((User) principal).getAuthorities();
+            Collection<? extends GrantedAuthority> roles =
+                    (principal instanceof DefaultOidcUser)
+                            ? ((DefaultOidcUser) principal)
+                                    .getAuthorities().stream()
+                                            .filter(a -> a.getAuthority().startsWith("ROLE_"))
+                                            .collect(Collectors.toList())
+                            : ((User) principal).getAuthorities();
 
             model.addAttribute("roles", roles);
             model.addAttribute("admin", isAdmin(principal));
@@ -223,7 +226,6 @@ public class UserController {
             throw new IllegalStateException("Unknown principal type: " + principal.getClass());
         }
 
-        return authorities.stream()
-                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+        return authorities.stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
     }
 }
